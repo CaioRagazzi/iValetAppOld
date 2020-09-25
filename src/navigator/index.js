@@ -3,6 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoginScreen from '../screens/login/login';
+import ForgotPasswordScreen from '../screens/login/forgotPassword';
+import CadastroLoginScreen from '../screens/login/cadastro';
 import HomeScreen from '../screens/home/home';
 import {AuthContext} from '../contexts/auth';
 
@@ -14,6 +16,16 @@ function LoginNavigator() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CadastroLogin"
+        component={CadastroLoginScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -1,14 +1,34 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState, forwardRef} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {Button, Input, Icon, Card} from 'react-native-elements';
 import {AuthContext} from '../../contexts/auth';
+import {showWarning} from '../../components/toast';
 
-export default function LoginScreen() {
-  const authContext = useContext(AuthContext);
+function LoginScreen() {
+  const {error, logIn, loading} = useContext(AuthContext);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (error) {
+      showWarning('Login e ou senha inválidos');
+    }
+  }, [error]);
 
   const handleLogin = () => {
-    console.log('login');
-    authContext.logIn();
+    const isOk = verifyFields();
+
+    if (isOk) {
+      logIn(username, password);
+    }
+  };
+
+  const verifyFields = () => {
+    if (username === '' || password === '') {
+      showWarning('Favor preencher todos os campos obrigatórios');
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -17,17 +37,27 @@ export default function LoginScreen() {
         <Card.Title style={styles.cardTitle}>iValet</Card.Title>
         <View style={styles.subMainContainer}>
           <Input
-            placeholder="Email"
+            placeholder="Email*"
             leftIcon={<Icon name="email" size={24} color="black" />}
+            onChangeText={(text) => setUsername(text)}
+            value={username}
+            autoCapitalize="none"
+            textContentType="emailAddress"
+            keyboardType="email-address"
           />
           <Input
-            placeholder="Password"
+            placeholder="Password*"
             leftIcon={<Icon name="lock" size={24} color="black" />}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+            autoCapitalize="none"
+            secureTextEntry
           />
           <Button
             containerStyle={styles.button}
             title="Login"
             onPress={() => handleLogin()}
+            loading={loading}
           />
           <View style={styles.infoContainer}>
             <Text style={styles.txtForgotPassword}>Esqueci a senha</Text>
@@ -85,3 +115,5 @@ const styles = StyleSheet.create({
     width: '50%',
   },
 });
+
+export default forwardRef(LoginScreen);

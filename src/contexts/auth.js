@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from '../services/axios';
 
@@ -20,9 +20,12 @@ const AuthProvider = ({children}) => {
       .then(async (res) => {
         if (res.data.access_token) {
           await AsyncStorage.setItem('access_token', res.data.access_token);
+          setLoggedIn(true);
+          setLoading(false);
         }
       })
       .catch(() => {
+        setLoggedIn(false);
         setLoading(false);
         setError(true);
         setTimeout(() => {
@@ -31,7 +34,9 @@ const AuthProvider = ({children}) => {
       });
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    await AsyncStorage.clear();
+    setLoading(false);
     setLoggedIn(false);
   };
 

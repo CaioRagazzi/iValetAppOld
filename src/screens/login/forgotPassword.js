@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 import {Button} from 'react-native-elements';
 import {InputEmail} from '../../components/inputEmail';
 import BaseLayout from './baseLayout';
+import axios from '../../services/axios';
+import {showError, showWarning} from '../../components/toast';
 
 export default function ForgotPassword(props) {
   const [email, setEmail] = useState('');
@@ -10,6 +12,21 @@ export default function ForgotPassword(props) {
   const [loading, setLoading] = useState(false);
 
   const forgotPassword = () => {
+    setLoading(true);
+    Keyboard.dismiss();
+    axios
+      .post('/user/SendEmailForgotPassword', {
+        to: email,
+      })
+      .then(() => {
+        showWarning('E-mail de recuperação enviado!');
+        props.navigation.goBack();
+        setLoading(false);
+      })
+      .catch(() => {
+        showError('Erro ao recuperar e-mail!');
+        setLoading(false);
+      });
     console.log('forgot');
   };
 

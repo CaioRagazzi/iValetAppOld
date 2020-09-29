@@ -54,7 +54,7 @@ function LoginScreen(props) {
   };
 
   const goToCadastro = () => {
-    props.navigation.navigate('CadastroLogin');
+    props.navigation.navigate('SelectType');
   };
 
   const goToForgotPassword = () => {

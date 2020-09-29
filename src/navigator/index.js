@@ -6,6 +6,7 @@ import LoginScreen from '../screens/login/login';
 import ForgotPasswordScreen from '../screens/login/forgotPassword';
 import CadastroLoginScreen from '../screens/login/cadastro';
 import HomeScreen from '../screens/home/home';
+import SelectTypeScreen from '../screens/login/selectType';
 import {AuthContext} from '../contexts/auth';
 
 const Stack = createStackNavigator();
@@ -26,6 +27,11 @@ function LoginNavigator() {
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPasswordScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SelectType"
+        component={SelectTypeScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

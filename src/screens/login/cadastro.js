@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 
@@ -18,6 +18,13 @@ function CadastroLogin(props) {
   const [inputEmailErr, setInputEmailErr] = useState(false);
   const [inputPasswordErr, setInputPasswordErr] = useState(false);
   const [inputConfirmPasswordErr, setInputConfirmPasswordErr] = useState(false);
+  const [type, setType] = useState('');
+
+  useEffect(() => {
+    const typeParams = props.route.params.type;
+
+    setType(typeParams);
+  }, [props.route.params.type]);
 
   const checkEnabledButton = () => {
     if (
@@ -25,7 +32,7 @@ function CadastroLogin(props) {
       inputPasswordErr ||
       inputConfirmPasswordErr ||
       name.length <= 0 ||
-      company.length <= 0
+      (company.length <= 0 && type === 'company')
     ) {
       return true;
     } else {
@@ -39,6 +46,14 @@ function CadastroLogin(props) {
       name,
       password,
       email,
+      perfil: 2,
+    };
+
+    const userCompanyToInsert = {
+      name,
+      password,
+      email,
+      perfil: 1,
     };
 
     const companyToInsert = {
@@ -46,9 +61,13 @@ function CadastroLogin(props) {
     };
 
     try {
-      const newUser = await axios.post('/user', userToInsert);
-      companyToInsert.user = newUser.data.raw.insertId;
-      await axios.post('/company', companyToInsert);
+      if (type === 'company') {
+        const newUser = await axios.post('/user', userCompanyToInsert);
+        companyToInsert.user = newUser.data.raw.insertId;
+        await axios.post('/company', companyToInsert);
+      } else {
+        await axios.post('/user', userToInsert);
+      }
       showWarning('Usuário criado com sucesso!');
       props.navigation.goBack();
       setLoading(false);
@@ -79,17 +98,19 @@ function CadastroLogin(props) {
         value={email}
         hasErrors={(err) => setInputEmailErr(err)}
       />
-      <Input
-        placeholder="Empresa"
-        leftIcon={<Icon name="business" size={24} color="black" />}
-        onChangeText={(text) => setCompany(text)}
-        value={company}
-        autoCapitalize="words"
-        textContentType="name"
-        errorMessage={
-          company.length <= 0 ? 'Nome da empresa é obrigatório' : ''
-        }
-      />
+      {type === 'company' ? (
+        <Input
+          placeholder="Empresa"
+          leftIcon={<Icon name="business" size={24} color="black" />}
+          onChangeText={(text) => setCompany(text)}
+          value={company}
+          autoCapitalize="words"
+          textContentType="name"
+          errorMessage={
+            company.length <= 0 ? 'Nome da empresa é obrigatório' : ''
+          }
+        />
+      ) : null}
       <InputPassword
         onChange={(text) => setPassword(text)}
         required

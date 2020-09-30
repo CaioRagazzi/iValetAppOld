@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text} from 'react-native';
+import {Button} from 'react-native-elements';
 import {AuthContext} from '../../contexts/auth';
 
 export default function HomeScreen() {

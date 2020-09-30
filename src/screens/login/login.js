@@ -7,16 +7,17 @@ import {
   Keyboard,
 } from 'react-native';
 import {Button} from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
+import jwt_decode from 'jwt-decode';
+
 import {AuthContext} from '../../contexts/auth';
 import {showWarning} from '../../components/toast';
 import {validateEmail} from '../../utils/utilsFunctions';
-import jwt_decode from 'jwt-decode';
-import AsyncStorage from '@react-native-community/async-storage';
-
 import {InputEmail} from '../../components/inputEmail';
 import {InputPassword} from '../../components/inputPassword';
 import OverlayCompanies from '../../components/overlayCompanies/index';
 import BaseLayout from './baseLayout';
+import axios from '../../services/axios';
 
 function LoginScreen(props) {
   const {error, logIn, loading, authenticated, setLogged, setType} = useContext(
@@ -40,7 +41,7 @@ function LoginScreen(props) {
         const token = await AsyncStorage.getItem('access_token');
         var decodedToken = jwt_decode(token);
         if (decodedToken.idPerfil === 1) {
-          setOverlayVisible(true);
+          handleLogicCompany(decodedToken.id);
         } else {
           setType(2);
           setLogged(true);
@@ -57,6 +58,21 @@ function LoginScreen(props) {
       setInputEmailErrorMessage('');
     }
   }, [username]);
+
+  const handleLogicCompany = async (userId) => {
+    await axios.get(`user/${userId}`).then(async (res) => {
+      if (res.data.company.length > 1) {
+        setOverlayVisible(true);
+      } else {
+        setType(1);
+        setLogged(true);
+        await AsyncStorage.setItem(
+          'company',
+          res.data.company[0].id.toString(),
+        );
+      }
+    });
+  };
 
   const handleLogin = () => {
     const isOk = verifyFields();

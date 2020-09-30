@@ -6,13 +6,12 @@ export default function HomeScreen() {
   const authContext = useContext(AuthContext);
 
   const handleLogOut = () => {
-    console.log('logout');
     authContext.logOut();
   };
 
   return (
     <View>
-      <Text> Home </Text>
+      <Text> Home Company </Text>
       <Button title="Deslogar" onPress={() => handleLogOut()} />
     </View>
   );

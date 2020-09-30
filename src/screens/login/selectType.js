@@ -29,6 +29,11 @@ export default function SelectType(props) {
           onPress={() => handleNavigateToCadastro('company')}
         />
       </View>
+      <Button
+        containerStyle={styles.button}
+        title="Voltar"
+        onPress={() => props.navigation.goBack()}
+      />
     </BaseLayout>
   );
 }
@@ -44,5 +49,10 @@ const styles = StyleSheet.create({
   titleButtonStyle: {
     padding: 10,
     color: 'black',
+  },
+  button: {
+    alignSelf: 'center',
+    width: '30%',
+    paddingTop: 16,
   },
 });

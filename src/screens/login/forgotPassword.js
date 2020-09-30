@@ -27,7 +27,6 @@ export default function ForgotPassword(props) {
         showError('Erro ao recuperar e-mail!');
         setLoading(false);
       });
-    console.log('forgot');
   };
 
   return (

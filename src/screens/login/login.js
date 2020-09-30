@@ -16,7 +16,7 @@ import {InputPassword} from '../../components/inputPassword';
 import BaseLayout from './baseLayout';
 
 function LoginScreen(props) {
-  const {error, logIn, loading} = useContext(AuthContext);
+  const {error, logIn, loading, authenticated} = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [inputEmailErrorMessage, setInputEmailErrorMessage] = useState('');
@@ -27,6 +27,12 @@ function LoginScreen(props) {
       showWarning('Login e ou senha inválidos');
     }
   }, [error]);
+
+  useEffect(() => {
+    if (authenticated) {
+      props.navigation.navigate('Loading');
+    }
+  }, [authenticated, props.navigation]);
 
   useEffect(() => {
     if (!validateEmail(username) && username !== '') {

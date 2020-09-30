@@ -15,6 +15,7 @@ export default function SelectType(props) {
         <Button
           type="outline"
           containerStyle={styles.buttonContainer}
+          buttonStyle={styles.buttonStyle}
           icon={<Icon name="car" size={20} color="black" />}
           titleStyle={styles.titleButtonStyle}
           title="Cliente"
@@ -23,6 +24,7 @@ export default function SelectType(props) {
         <Button
           type="outline"
           containerStyle={styles.buttonContainer}
+          buttonStyle={styles.buttonStyle}
           icon={<Icon name="business-outline" size={20} color="black" />}
           titleStyle={styles.titleButtonStyle}
           title="Empresa"
@@ -53,6 +55,10 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: 'center',
     width: '30%',
-    paddingTop: 16,
+    marginTop: 16,
+  },
+  buttonStyle: {
+    backgroundColor: 'white',
+    borderColor: '#9E8170'
   },
 });

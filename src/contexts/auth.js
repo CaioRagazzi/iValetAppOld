@@ -5,6 +5,7 @@ import axios from '../services/axios';
 export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
+  const [splash, setSplash] = useState(true);
   const [authenticated, setauthenticated] = useState(false);
   const [logged, setLogged] = useState(false);
   const [type, setType] = useState(0);
@@ -55,6 +56,8 @@ const AuthProvider = ({children}) => {
         setType,
         type,
         logged,
+        setSplash,
+        splash,
       }}>
       {children}
     </AuthContext.Provider>

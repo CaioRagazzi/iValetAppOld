@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     textAlignVertical: 'center',
     color: 'white',
-    backgroundColor: '#2288dd',
+    backgroundColor: '#832D25',
     fontSize: 26,
     height: 50,
   },

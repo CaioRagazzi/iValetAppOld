@@ -10,13 +10,19 @@ import {Button} from 'react-native-elements';
 import {AuthContext} from '../../contexts/auth';
 import {showWarning} from '../../components/toast';
 import {validateEmail} from '../../utils/utilsFunctions';
+import jwt_decode from 'jwt-decode';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {InputEmail} from '../../components/inputEmail';
 import {InputPassword} from '../../components/inputPassword';
+import OverlayCompanies from '../../components/overlayCompanies/index';
 import BaseLayout from './baseLayout';
 
 function LoginScreen(props) {
-  const {error, logIn, loading, authenticated} = useContext(AuthContext);
+  const {error, logIn, loading, authenticated, setLogged, setType} = useContext(
+    AuthContext,
+  );
+  const [overlayVisible, setOverlayVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [inputEmailErrorMessage, setInputEmailErrorMessage] = useState('');
@@ -30,9 +36,19 @@ function LoginScreen(props) {
 
   useEffect(() => {
     if (authenticated) {
-      props.navigation.navigate('Loading');
+      const getToken = async () => {
+        const token = await AsyncStorage.getItem('access_token');
+        var decodedToken = jwt_decode(token);
+        if (decodedToken.idPerfil === 1) {
+          setOverlayVisible(true);
+        } else {
+          setType(2);
+          setLogged(true);
+        }
+      };
+      getToken();
     }
-  }, [authenticated, props.navigation]);
+  }, [authenticated, props.navigation, setType, setLogged]);
 
   useEffect(() => {
     if (!validateEmail(username) && username !== '') {
@@ -79,6 +95,13 @@ function LoginScreen(props) {
     }
   };
 
+  const handleSelectedCompany = async (value) => {
+    setOverlayVisible(false);
+    setType(1);
+    setLogged(true);
+    await AsyncStorage.setItem('company', value.id.toString());
+  };
+
   return (
     <BaseLayout title="iValet">
       <InputEmail
@@ -97,6 +120,7 @@ function LoginScreen(props) {
         onPress={() => handleLogin()}
         loading={loading}
         disabled={checkEnabledButton()}
+        raised
       />
       <View style={styles.infoContainer}>
         <TouchableWithoutFeedback onPress={() => goToForgotPassword()}>
@@ -109,6 +133,11 @@ function LoginScreen(props) {
           </TouchableWithoutFeedback>
         </View>
       </View>
+      <OverlayCompanies
+        visible={overlayVisible}
+        onPress={handleSelectedCompany}
+        onClose={() => setOverlayVisible(false)}
+      />
     </BaseLayout>
   );
 }

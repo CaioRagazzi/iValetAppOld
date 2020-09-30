@@ -11,7 +11,6 @@ instance.interceptors.request.use(
       const token = await AsyncStorage.getItem('access_token');
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(config);
     return config;
   },
   function (error) {

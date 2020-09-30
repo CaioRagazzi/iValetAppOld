@@ -52,7 +52,7 @@ export const InputPassword = (props) => {
   return (
     <Input
       placeholder={!props.placeholder ? 'Senha' : props.placeholder}
-      leftIcon={<Icon name="lock" size={24} color="black" />}
+      leftIcon={<Icon name="lock" size={24} />}
       onChangeText={handlePasswordChange}
       value={password}
       autoCapitalize="none"

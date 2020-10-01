@@ -5,6 +5,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Icon} from 'react-native-elements';
 
 import HomeCompanyScreen from '../screens/companyScreens/home';
+import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -20,7 +21,12 @@ function HomeCompanyNavigator() {
 
 function HomeTabNavigator() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#41484F',
+        activeBackgroundColor: '#FCFCFC',
+        keyboardHidesTabBar: true,
+      }}>
       <Tab.Screen
         name="Home"
         component={HomeStackNavigator}
@@ -32,8 +38,17 @@ function HomeTabNavigator() {
 
 function HomeStackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#FCFCFC'},
+        headerTitleStyle: {color: '#41484F'},
+      }}>
       <Stack.Screen name="Home" component={HomeCompanyScreen} />
+      <Stack.Screen
+        name="FormEntryCar"
+        component={FormCarEntryScreen}
+        options={{title: 'Formulário Entrada'}}
+      />
     </Stack.Navigator>
   );
 }

@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {View, Text} from 'react-native';
-import {Button} from 'react-native-elements';
 import {AuthContext} from '../../contexts/auth';
+import FloatingActionButton from '../../components/floatingActionButton';
 
 export default function HomeScreen({navigation}) {
   const authContext = useContext(AuthContext);
@@ -11,9 +11,12 @@ export default function HomeScreen({navigation}) {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Text> Home Company </Text>
-      <Button title="Deslogar" onPress={() => handleLogOut()} />
+      <FloatingActionButton
+        text="Entrada"
+        onPress={() => navigation.navigate('FormEntryCar')}
+      />
     </View>
   );
 }

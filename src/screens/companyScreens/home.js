@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import {Button} from 'react-native-elements';
 import {AuthContext} from '../../contexts/auth';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
   const authContext = useContext(AuthContext);
 
   const handleLogOut = () => {

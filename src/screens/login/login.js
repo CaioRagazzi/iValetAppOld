@@ -20,9 +20,15 @@ import BaseLayout from './baseLayout';
 import axios from '../../services/axios';
 
 function LoginScreen(props) {
-  const {error, logIn, loading, authenticated, setLogged, setType} = useContext(
-    AuthContext,
-  );
+  const {
+    error,
+    logIn,
+    loading,
+    authenticated,
+    setLogged,
+    setType,
+    setCompanyId,
+  } = useContext(AuthContext);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -36,12 +42,23 @@ function LoginScreen(props) {
   }, [error]);
 
   useEffect(() => {
+    const handleLoginCompany = async (userId) => {
+      await axios.get(`user/${userId}`).then(async (res) => {
+        if (res.data.company.length > 1) {
+          setOverlayVisible(true);
+        } else {
+          setType(1);
+          setLogged(true);
+          setCompanyId(res.data.company[0].id);
+        }
+      });
+    };
     if (authenticated) {
       const getToken = async () => {
         const token = await AsyncStorage.getItem('access_token');
         var decodedToken = jwt_decode(token);
         if (decodedToken.idPerfil === 1) {
-          handleLogicCompany(decodedToken.id);
+          handleLoginCompany(decodedToken.id);
         } else {
           setType(2);
           setLogged(true);
@@ -49,7 +66,7 @@ function LoginScreen(props) {
       };
       getToken();
     }
-  }, [authenticated, props.navigation, setType, setLogged]);
+  }, [authenticated, props.navigation, setType, setLogged, setCompanyId]);
 
   useEffect(() => {
     if (!validateEmail(username) && username !== '') {
@@ -58,21 +75,6 @@ function LoginScreen(props) {
       setInputEmailErrorMessage('');
     }
   }, [username]);
-
-  const handleLogicCompany = async (userId) => {
-    await axios.get(`user/${userId}`).then(async (res) => {
-      if (res.data.company.length > 1) {
-        setOverlayVisible(true);
-      } else {
-        setType(1);
-        setLogged(true);
-        await AsyncStorage.setItem(
-          'company',
-          res.data.company[0].id.toString(),
-        );
-      }
-    });
-  };
 
   const handleLogin = () => {
     const isOk = verifyFields();
@@ -115,7 +117,7 @@ function LoginScreen(props) {
     setOverlayVisible(false);
     setType(1);
     setLogged(true);
-    await AsyncStorage.setItem('company', value.id.toString());
+    setCompanyId(value.id);
   };
 
   return (

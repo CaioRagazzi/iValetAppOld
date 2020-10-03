@@ -2,11 +2,12 @@ import React, {useEffect, useContext} from 'react';
 import {View, ScrollView, StyleSheet, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import jwt_decode from 'jwt-decode';
+import axios from '../../services/axios';
 
 import {AuthContext} from '../../contexts/auth';
 
 export default function LoadingScreen() {
-  const {setLogged, setType, setSplash} = useContext(AuthContext);
+  const {setLogged, setType, setSplash, setCompanyId} = useContext(AuthContext);
   useEffect(() => {
     setTimeout(() => {
       const getToken = async () => {
@@ -17,11 +18,11 @@ export default function LoadingScreen() {
         } else {
           var decodedToken = jwt_decode(token);
           if (decodedToken.idPerfil === 1) {
-            const company = await AsyncStorage.getItem('company');
-            if (company) {
+            await axios.get(`user/${decodedToken.id}`).then((res) => {
               setType(1);
               setLogged(true);
-            }
+              setCompanyId(res.data.company[0].id);
+            });
           } else {
             setType(2);
             setLogged(true);
@@ -31,7 +32,8 @@ export default function LoadingScreen() {
       };
       getToken();
     }, 2500);
-  }, [setLogged, setSplash, setType]);
+  }, [setLogged, setSplash, setType, setCompanyId]);
+
   return (
     <View style={styles.viewContainer}>
       <ScrollView

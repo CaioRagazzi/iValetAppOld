@@ -12,6 +12,7 @@ const AuthProvider = ({children}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [companyId, setCompanyId] = useState(0);
+  const [token, setToken] = useState('');
 
   const logIn = (username, password) => {
     setauthenticated(false);
@@ -60,6 +61,8 @@ const AuthProvider = ({children}) => {
         splash,
         setCompanyId,
         companyId,
+        token,
+        setToken,
       }}>
       {children}
     </AuthContext.Provider>

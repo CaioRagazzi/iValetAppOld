@@ -6,7 +6,7 @@ import {AuthContext} from '../../contexts/auth';
 import {ListItem} from 'react-native-elements';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 
-export default function Entry() {
+export default function Finished() {
   const {companyId, token} = useContext(AuthContext);
   const [io, setIo] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -19,7 +19,7 @@ export default function Entry() {
     setIo(socket);
 
     socket
-      .on(`openedTransactions:company:${companyId}`, (msg) => {
+      .on(`finishedTransactions:company:${companyId}`, (msg) => {
         console.log(msg);
         addTransactions(msg);
       })
@@ -45,7 +45,7 @@ export default function Entry() {
 
   const getCars = useCallback(() => {
     axios
-      .get(`transaction/opened/${companyId}`)
+      .get(`transaction/finished/${companyId}`)
       .then((res) => {
         addTransactions(res.data);
       })

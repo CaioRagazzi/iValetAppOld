@@ -7,11 +7,14 @@ import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
 
 export default function LoadingScreen() {
-  const {setLogged, setType, setSplash, setCompanyId} = useContext(AuthContext);
+  const {setLogged, setType, setSplash, setCompanyId, setToken} = useContext(
+    AuthContext,
+  );
   useEffect(() => {
     setTimeout(() => {
       const getToken = async () => {
         const token = await AsyncStorage.getItem('access_token');
+        setToken(token);
         if (!token) {
           setType(0);
           setLogged(false);
@@ -32,7 +35,7 @@ export default function LoadingScreen() {
       };
       getToken();
     }, 2500);
-  }, [setLogged, setSplash, setType, setCompanyId]);
+  }, [setLogged, setSplash, setType, setCompanyId, setToken]);
 
   return (
     <View style={styles.viewContainer}>

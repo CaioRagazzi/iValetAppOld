@@ -8,6 +8,7 @@ import IconIonicon from 'react-native-vector-icons/Ionicons';
 import HomeCompanyScreen from '../screens/companyScreens/home';
 import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 import EntryScreen from '../screens/companyScreens/entry';
+import FinishedScreen from '../screens/companyScreens/finished';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -43,6 +44,13 @@ function HomeTabNavigator() {
           tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
         }}
       />
+      <Tab.Screen
+        name="Saida"
+        component={Finished}
+        options={{
+          tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -72,6 +80,18 @@ function EntradaStackNavigator() {
         headerTitleStyle: {color: '#41484F'},
       }}>
       <Stack.Screen name="Entrada" component={EntryScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function Finished() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#FCFCFC'},
+        headerTitleStyle: {color: '#41484F'},
+      }}>
+      <Stack.Screen name="Saída" component={FinishedScreen} />
     </Stack.Navigator>
   );
 }

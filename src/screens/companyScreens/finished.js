@@ -20,7 +20,6 @@ export default function Finished() {
 
     socket
       .on(`finishedTransactions:company:${companyId}`, (msg) => {
-        console.log(msg);
         addTransactions(msg);
       })
       .on('connect', () => {
@@ -47,6 +46,7 @@ export default function Finished() {
     axios
       .get(`transaction/finished/${companyId}`)
       .then((res) => {
+        console.log(res.data);
         addTransactions(res.data);
       })
       .catch((err) => {

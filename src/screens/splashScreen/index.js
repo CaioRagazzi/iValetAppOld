@@ -14,18 +14,24 @@ export default function LoadingScreen() {
     setTimeout(() => {
       const getToken = async () => {
         const token = await AsyncStorage.getItem('access_token');
-        setToken(token);
         if (!token) {
           setType(0);
           setLogged(false);
         } else {
+          setToken(token);
           var decodedToken = jwt_decode(token);
           if (decodedToken.idPerfil === 1) {
-            await axios.get(`user/${decodedToken.id}`).then((res) => {
-              setType(1);
-              setLogged(true);
-              setCompanyId(res.data.company[0].id);
-            });
+            await axios
+              .get(`user/${decodedToken.id}`)
+              .then((res) => {
+                setType(1);
+                setLogged(true);
+                setCompanyId(res.data.company[0].id);
+              })
+              .catch(() => {
+                setType(0);
+                setLogged(false);
+              });
           } else {
             setType(2);
             setLogged(true);

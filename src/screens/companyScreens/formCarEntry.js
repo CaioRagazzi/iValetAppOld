@@ -22,7 +22,8 @@ export default function FormCarEntryScreen({navigation}) {
         navigation.navigate('Entrada');
       })
       .catch((err) => {
-        if (err.response.data.errno === 1062) {
+        console.log(err.response.data);
+        if (err.response.data.message === 'Cars already in') {
           showError('Carro já se encontra no estacionamento!');
         }
       });

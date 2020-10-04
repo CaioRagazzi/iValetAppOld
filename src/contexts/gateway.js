@@ -19,7 +19,6 @@ export const GatewayProvider = ({children}) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(children);
     const socket = socketIo.connect('http://192.168.0.4:8082/', {
       query: {token},
     });

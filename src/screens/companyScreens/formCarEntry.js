@@ -10,18 +10,21 @@ import {showError} from '../../components/toast';
 export default function FormCarEntryScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
   const [placa, setPlaca] = useState('');
+  const [prisma, setPrisma] = useState(0);
 
   const addCar = () => {
     axios
       .post('transaction', {
         placa,
         companyId,
+        prismaNumber: +prisma,
       })
       .then((res) => {
         navigation.popToTop();
         navigation.navigate('Entrada');
       })
       .catch((err) => {
+        console.log(err.response.data);
         if (err.response.data.message === 'Cars already in') {
           showError('Carro já se encontra no estacionamento!');
         }
@@ -35,6 +38,14 @@ export default function FormCarEntryScreen({navigation}) {
         placeholder="Digite a placa do veículo"
         leftIcon={<Icon name="credit-card" size={24} color="black" />}
         onChangeText={(value) => setPlaca(value)}
+      />
+      <Input
+        label="Prisma"
+        placeholder="Número do prisma"
+        leftIcon={
+          <IconIonicon name="bookmark-outline" size={24} color="black" />
+        }
+        onChangeText={(value) => setPrisma(value)}
       />
       <Button
         icon={<IconIonicon name="checkbox-outline" size={15} color="green" />}

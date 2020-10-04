@@ -7,6 +7,7 @@ import IconIonicon from 'react-native-vector-icons/Ionicons';
 import HomeCompanyScreen from '../screens/companyScreens/home';
 import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 import EntryScreen from '../screens/companyScreens/entry';
+import CarDetailsScreen from '../screens/companyScreens/carDetails';
 import FinishedScreen from '../screens/companyScreens/finished';
 import {GatewayProvider} from '../contexts/gateway';
 
@@ -82,6 +83,7 @@ function EntryStackNavigator() {
         headerTitleStyle: {color: '#41484F'},
       }}>
       <Stack.Screen name="Entrada" component={EntryScreen} />
+      <Stack.Screen name="Details" component={CarDetailsScreen} />
     </Stack.Navigator>
   );
 }

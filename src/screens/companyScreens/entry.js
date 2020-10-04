@@ -1,58 +1,13 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, {useContext} from 'react';
 import {View, FlatList} from 'react-native';
-import socketIo from 'socket.io-client';
-import axios from '../../services/axios';
-import {AuthContext} from '../../contexts/auth';
+import {GatewayContext} from '../../contexts/gateway';
 import {ListItem} from 'react-native-elements';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 
 export default function Entry() {
-  const {companyId, token} = useContext(AuthContext);
-  const [io, setIo] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const socket = socketIo.connect('http://192.168.0.4:8082/', {
-      query: {token},
-    });
-    setIo(socket);
-
-    socket
-      .on(`openedTransactions:company:${companyId}`, (msg) => {
-        console.log(msg);
-        addTransactions(msg);
-      })
-      .on('connect', () => {
-        console.log('connected');
-      })
-      .on('disconnect', () => {
-        console.log('disconnected');
-      });
-
-    getCars();
-    return function cleanup() {
-      console.log('cleaning');
-      socket.disconnect();
-    };
-  }, [companyId, getCars, token]);
-
-  const addTransactions = (msg) => {
-    setLoading(true);
-    setTransactions(msg);
-    setLoading(false);
-  };
-
-  const getCars = useCallback(() => {
-    axios
-      .get(`transaction/opened/${companyId}`)
-      .then((res) => {
-        addTransactions(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-      });
-  }, [companyId]);
+  const {openedTransactions, getOpenedCars, loading} = useContext(
+    GatewayContext,
+  );
 
   const ItemView = ({item}) => {
     return (
@@ -72,8 +27,8 @@ export default function Entry() {
     <View style={{flex: 1}}>
       <FlatList
         refreshing={loading}
-        onRefresh={getCars}
-        data={transactions}
+        onRefresh={getOpenedCars}
+        data={openedTransactions}
         keyExtractor={(item) => item.id.toString()}
         renderItem={ItemView}
       />

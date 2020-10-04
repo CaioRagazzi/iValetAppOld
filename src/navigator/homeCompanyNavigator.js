@@ -2,13 +2,13 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Icon} from 'react-native-elements';
 import IconIonicon from 'react-native-vector-icons/Ionicons';
 
 import HomeCompanyScreen from '../screens/companyScreens/home';
 import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 import EntryScreen from '../screens/companyScreens/entry';
 import FinishedScreen from '../screens/companyScreens/finished';
+import {GatewayProvider} from '../contexts/gateway';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -24,34 +24,36 @@ function HomeCompanyNavigator() {
 
 function HomeTabNavigator() {
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#41484F',
-        activeBackgroundColor: '#FCFCFC',
-        keyboardHidesTabBar: true,
-      }}>
-      <Tab.Screen
-        name="Home"
-        component={HomeStackNavigator}
-        options={{
-          tabBarIcon: () => <IconIonicon name="home-outline" size={24} />,
-        }}
-      />
-      <Tab.Screen
-        name="Entrada"
-        component={EntradaStackNavigator}
-        options={{
-          tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
-        }}
-      />
-      <Tab.Screen
-        name="Saida"
-        component={Finished}
-        options={{
-          tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
-        }}
-      />
-    </Tab.Navigator>
+    <GatewayProvider>
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: '#41484F',
+          activeBackgroundColor: '#FCFCFC',
+          keyboardHidesTabBar: true,
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={HomeStackNavigator}
+          options={{
+            tabBarIcon: () => <IconIonicon name="home-outline" size={24} />,
+          }}
+        />
+        <Tab.Screen
+          name="Entrada"
+          component={EntryStackNavigator}
+          options={{
+            tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
+          }}
+        />
+        <Tab.Screen
+          name="Saida"
+          component={FinishedStackNavigator}
+          options={{
+            tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
+          }}
+        />
+      </Tab.Navigator>
+    </GatewayProvider>
   );
 }
 
@@ -72,7 +74,7 @@ function HomeStackNavigator() {
   );
 }
 
-function EntradaStackNavigator() {
+function EntryStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -84,7 +86,7 @@ function EntradaStackNavigator() {
   );
 }
 
-function Finished() {
+function FinishedStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{

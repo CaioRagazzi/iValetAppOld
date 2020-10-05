@@ -1,19 +1,11 @@
-import React, {useContext} from 'react';
-import {View, Text, Button, FlatList} from 'react-native';
-import {AuthContext} from '../../contexts/auth';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import FloatingActionButton from '../../components/floatingActionButton';
 
 export default function HomeScreen({navigation}) {
-  const authContext = useContext(AuthContext);
-
-  const handleLogOut = () => {
-    authContext.logOut();
-  };
-
   return (
-    <View style={{flex: 1}}>
+    <View style={styles.mainContainer}>
       <Text> Home Company </Text>
-      <Button title="oi" onPress={() => handleLogOut()} />
       <FloatingActionButton
         text="Entrada"
         onPress={() => navigation.navigate('FormEntryCar')}
@@ -21,3 +13,9 @@ export default function HomeScreen({navigation}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
+});

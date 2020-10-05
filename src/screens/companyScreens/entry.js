@@ -18,7 +18,9 @@ export default function Entry({navigation}) {
         renderItem={({item}) => (
           <CardCar
             data={item}
-            onPress={() => navigation.navigate('Details', {car: item})}
+            onPress={() =>
+              navigation.navigate('Details', {transactionParam: item})
+            }
           />
         )}
       />

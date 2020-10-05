@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import IconIonicon from 'react-native-vector-icons/Ionicons';
 
+import CustomDrawerContent from './customDrawer';
 import HomeCompanyScreen from '../screens/companyScreens/home';
 import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 import EntryScreen from '../screens/companyScreens/entry';
@@ -17,7 +18,8 @@ const Drawer = createDrawerNavigator();
 
 function HomeCompanyNavigator() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={HomeTabNavigator} />
     </Drawer.Navigator>
   );
@@ -95,7 +97,7 @@ function FinishedStackNavigator() {
         headerStyle: {backgroundColor: '#FCFCFC'},
         headerTitleStyle: {color: '#41484F'},
       }}>
-      <Stack.Screen name="Saída" component={FinishedScreen} />
+      <Stack.Screen name="Saida" component={FinishedScreen} />
     </Stack.Navigator>
   );
 }

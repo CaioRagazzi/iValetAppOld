@@ -4,6 +4,7 @@ import {Text as TextH, Button} from 'react-native-elements';
 import FloatingActionButton from '../../components/floatingActionButton';
 import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
+import {showWarning} from '../../components/toast';
 
 export default function HomeScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
@@ -54,6 +55,14 @@ export default function HomeScreen({navigation}) {
     }
   };
 
+  const handleCarEnty = () => {
+    if (isCaixaOpened) {
+      navigation.navigate('FormEntryCar');
+    } else {
+      showWarning('O caixa esta fechado!');
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <TextH h2> Caixa {isCaixaOpened ? 'Aberto' : 'Fechado'} </TextH>
@@ -61,10 +70,7 @@ export default function HomeScreen({navigation}) {
         title={isCaixaOpened ? 'Fechar Caixa' : 'Abrir Caixa'}
         onPress={() => openCloseCaixa()}
       />
-      <FloatingActionButton
-        text="Entrada"
-        onPress={() => navigation.navigate('FormEntryCar')}
-      />
+      <FloatingActionButton text="Entrada" onPress={() => handleCarEnty()} />
     </View>
   );
 }

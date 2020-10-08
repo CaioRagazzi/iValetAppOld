@@ -10,6 +10,7 @@ import FormCarEntryScreen from '../screens/companyScreens/formCarEntry';
 import EntryScreen from '../screens/companyScreens/entry';
 import CarDetailsScreen from '../screens/companyScreens/carDetails';
 import FinishedScreen from '../screens/companyScreens/finished';
+import PricesScreen from '../screens/companyScreens/prices';
 import {GatewayProvider} from '../contexts/gateway';
 
 const Tab = createBottomTabNavigator();
@@ -21,6 +22,7 @@ function HomeCompanyNavigator() {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={HomeTabNavigator} />
+      <Drawer.Screen name="Prices" component={PricesStackNavigator} />
     </Drawer.Navigator>
   );
 }
@@ -98,6 +100,18 @@ function FinishedStackNavigator() {
         headerTitleStyle: {color: '#41484F'},
       }}>
       <Stack.Screen name="Saida" component={FinishedScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function PricesStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#FCFCFC'},
+        headerTitleStyle: {color: '#41484F'},
+      }}>
+      <Stack.Screen name="Prices" component={PricesScreen} />
     </Stack.Navigator>
   );
 }

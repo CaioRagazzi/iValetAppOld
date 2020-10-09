@@ -5,12 +5,19 @@ import FloatingActionButton from '../../components/floatingActionButton';
 import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
 import {showWarning} from '../../components/toast';
+import OpenDrawerIcon from '../../components/openDrawerIcon';
 
 export default function HomeScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
   const [isCaixaOpened, setIsCaixaOpened] = useState(false);
 
   useEffect(() => {
+    navigation.setOptions({
+      title: 'Home',
+      headerLeft: () => (
+        <OpenDrawerIcon onPress={() => navigation.toggleDrawer()} />
+      ),
+    });
     axios
       .get(`caixa/openedCaixa/${companyId}`)
       .then((res) => {

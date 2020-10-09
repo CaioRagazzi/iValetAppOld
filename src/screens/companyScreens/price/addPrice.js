@@ -1,10 +1,19 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
+import OverlaySelectTime from '../../../components/overlaySelectTime';
 
 export default function AddPrice() {
   return (
-    <View>
-      <Text>add price</Text>
-    </View>
+    <SafeAreaView style={styles.mainContainer}>
+      <DateButtonsCalendar />
+      <OverlaySelectTime visible={true} />
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
+});

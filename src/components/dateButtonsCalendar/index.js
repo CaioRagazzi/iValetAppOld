@@ -14,72 +14,75 @@ export default function DateButtonsCalendar() {
   return (
     <SafeAreaView style={styles.buttonsAreaContainer}>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: segunda ? '#9E8170' : null},
-        ]}
+        style={
+          segunda
+            ? styles.buttonsContainerEnable
+            : styles.buttonsContainerDisable
+        }
         onPress={() => setSegunda(!segunda)}>
-        <TextEl h4 style={{color: segunda ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={segunda ? styles.textEnable : styles.textDisable}>
           S
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: terca ? '#9E8170' : null},
-        ]}
+        style={
+          terca ? styles.buttonsContainerEnable : styles.buttonsContainerDisable
+        }
         onPress={() => setTerca(!terca)}>
-        <TextEl h4 style={{color: terca ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={terca ? styles.textEnable : styles.textDisable}>
           T
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: quarta ? '#9E8170' : null},
-        ]}
+        style={
+          quarta
+            ? styles.buttonsContainerEnable
+            : styles.buttonsContainerDisable
+        }
         onPress={() => setQuarta(!quarta)}>
-        <TextEl h4 style={{color: quarta ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={quarta ? styles.textEnable : styles.textDisable}>
           Q
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: quinta ? '#9E8170' : null},
-        ]}
+        style={
+          quinta
+            ? styles.buttonsContainerEnable
+            : styles.buttonsContainerDisable
+        }
         onPress={() => setQuinta(!quinta)}>
-        <TextEl h4 style={{color: quinta ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={quinta ? styles.textEnable : styles.textDisable}>
           Q
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: sexta ? '#9E8170' : null},
-        ]}
+        style={
+          sexta ? styles.buttonsContainerEnable : styles.buttonsContainerDisable
+        }
         onPress={() => setSexta(!sexta)}>
-        <TextEl h4 style={{color: sexta ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={sexta ? styles.textEnable : styles.textDisable}>
           S
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: sabado ? '#9E8170' : null},
-        ]}
+        style={
+          sabado
+            ? styles.buttonsContainerEnable
+            : styles.buttonsContainerDisable
+        }
         onPress={() => setSabado(!sabado)}>
-        <TextEl h4 style={{color: sabado ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={sabado ? styles.textEnable : styles.textDisable}>
           S
         </TextEl>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.buttonsContainer,
-          {backgroundColor: domingo ? '#9E8170' : null},
-        ]}
+        style={
+          domingo
+            ? styles.buttonsContainerEnable
+            : styles.buttonsContainerDisable
+        }
         onPress={() => setDomingo(!domingo)}>
-        <TextEl h4 style={{color: domingo ? '#E1DBD4' : '#41484F'}}>
+        <TextEl h4 style={domingo ? styles.textEnable : styles.textDisable}>
           D
         </TextEl>
       </TouchableOpacity>
@@ -94,13 +97,25 @@ const styles = StyleSheet.create({
     height: '8%',
     justifyContent: 'center',
   },
-  buttonsContainer: {
+  buttonsContainerDisable: {
     width: '14%',
     marginRight: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50,
+  },
+  buttonsContainerEnable: {
+    width: '15%',
+    marginRight: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
     borderWidth: 2,
-    borderColor: '#41484F',
+    borderColor: '#832D25',
+  },
+  textEnable: {
+    color: '#832D25',
+  },
+  textDisable: {
+    color: '#41484F',
   },
 });

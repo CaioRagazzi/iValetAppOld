@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,21 +14,69 @@ import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
 import InputTimer from '../../../components/inputTimer';
 import {format} from 'date-fns';
 import SaveIcon from '../../../components/saveIcon';
+import {AuthContext} from '../../../contexts/auth';
+import axios from '../../../services/axios';
+import {showWarning} from '../../../components/toast';
 
 export default function AddPrice({navigation}) {
+  const {companyId} = useContext(AuthContext);
   const [isFixedEnabled, setIsFixedEnabled] = useState(true);
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
   const [quantityDynamic, setQuantityDynamic] = useState([
     {id: format(new Date(), 'HHmmssSSS'), start: '', end: '', price: ''},
   ]);
-  const [typePrice, setTypePrice] = useState(0);
+  const [typePrice, setTypePrice] = useState(1);
+  const [selectedWeekDays, setSelectedWeekDays] = useState('');
+  const [fixedValue, setfixedValue] = useState('');
 
   useEffect(() => {
+    const save = () => {
+      if (typePrice === 1) {
+        if (!selectedWeekDays) {
+          showWarning('Favor preencher pelo menos um dia da semana');
+          return;
+        }
+        if (!fixedValue) {
+          showWarning('Favor preencher o campo valor');
+          return;
+        }
+        axios
+          .post('price', {
+            type: 1,
+            weekDay: selectedWeekDays,
+            companyId,
+            price: +fixedValue,
+            uniqueIdPrice: format(new Date(), 'HHmmssSSS'),
+          })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
+      }
+      console.log(typePrice);
+      console.log(quantityDynamic);
+      console.log(selectedWeekDays);
+      console.log(companyId);
+      console.log(format(new Date(), 'HHmmssSSS'));
+    };
     navigation.setOptions({
       title: 'Home',
-      headerRight: () => <SaveIcon onPress={() => console.log('oi')} />,
+      headerRight: () => (
+        <TouchableOpacity>
+          <SaveIcon onPress={() => save()} />
+        </TouchableOpacity>
+      ),
     });
-  }, [navigation]);
+  }, [
+    navigation,
+    quantityDynamic,
+    selectedWeekDays,
+    typePrice,
+    companyId,
+    fixedValue,
+  ]);
 
   const handleSwitches = (type) => {
     if (type === 'fixed') {
@@ -50,9 +98,12 @@ export default function AddPrice({navigation}) {
     return isFixedEnabled ? (
       <View style={styles.inputMainContainerFixed}>
         <Input
+          label="Valor"
           inputContainerStyle={styles.inputContainerFixed}
           leftIconContainerStyle={styles.inputIconContainerFixed}
           leftIcon={<Icon name="cash-outline" size={24} color="black" />}
+          value={fixedValue}
+          onChangeText={(text) => setfixedValue(text)}
         />
       </View>
     ) : null;
@@ -74,8 +125,10 @@ export default function AddPrice({navigation}) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView>
-        <DateButtonsCalendar />
+      <ScrollView contentContainerStyle={{flexGrow: 1}} scrollEnabled={true}>
+        <DateButtonsCalendar
+          OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
+        />
         <View style={styles.containerTexts}>
           <Text style={styles.text}>Valor Fixo: </Text>
           <Switch

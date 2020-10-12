@@ -8,8 +8,8 @@ export default function InputTimer(props) {
   return (
     <View style={styles.inputMainContainerDynamic}>
       <View style={styles.subMainContainer}>
-        <Text style={styles.text}>Início minutos:</Text>
         <Input
+          label="Início minutos:"
           inputContainerStyle={styles.inputContainerDynamic}
           leftIconContainerStyle={styles.inputIconContainerDynamic}
           leftIcon={<Icon name="time-outline" size={18} color="black" />}
@@ -19,8 +19,8 @@ export default function InputTimer(props) {
         />
       </View>
       <View style={styles.subMainContainer}>
-        <Text style={styles.text}>Final minutos:</Text>
         <Input
+          label="Final minutos:"
           inputContainerStyle={styles.inputContainerDynamic}
           leftIconContainerStyle={styles.inputIconContainerDynamic}
           leftIcon={<Icon name="time-outline" size={18} color="black" />}
@@ -30,8 +30,9 @@ export default function InputTimer(props) {
         />
       </View>
       <View style={styles.subMainContainer}>
-        <Text style={styles.text}>Preço:</Text>
         <Input
+          labelStyle={{marginBottom: 15}}
+          label="Preço"
           inputContainerStyle={styles.inputContainerDynamic}
           leftIconContainerStyle={styles.inputIconContainerDynamic}
           leftIcon={<Icon name="cash-outline" size={18} color="black" />}

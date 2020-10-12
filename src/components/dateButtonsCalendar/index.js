@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, SafeAreaView, StyleSheet} from 'react-native';
 import {Text as TextEl} from 'react-native-elements';
-import {color} from 'react-native-reanimated';
 
-export default function DateButtonsCalendar() {
+export default function DateButtonsCalendar(props) {
   const [segunda, setSegunda] = useState(false);
   const [terca, setTerca] = useState(false);
   const [quarta, setQuarta] = useState(false);
@@ -11,6 +10,20 @@ export default function DateButtonsCalendar() {
   const [sexta, setSexta] = useState(false);
   const [sabado, setSabado] = useState(false);
   const [domingo, setDomingo] = useState(false);
+
+  useEffect(() => {
+    const selectedWeekDays = () => {
+      const string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
+        quarta ? 'W|' : ''
+      }${quinta ? 'TH|' : ''}${sexta ? 'F|' : ''}${sabado ? 'SA|' : ''}${
+        domingo ? 'SU|' : ''
+      }`;
+
+      props.OnWeekDayChange(string);
+    };
+    selectedWeekDays();
+  }, [segunda, terca, quarta, quinta, sexta, sabado, domingo, props]);
+
   return (
     <SafeAreaView style={styles.buttonsAreaContainer}>
       <TouchableOpacity
@@ -94,7 +107,7 @@ const styles = StyleSheet.create({
   buttonsAreaContainer: {
     margin: 14,
     flexDirection: 'row',
-    height: '8%',
+    height: 50,
     justifyContent: 'center',
   },
   buttonsContainerDisable: {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,24 +6,39 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {Divider, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
-import OverlaySelectTime from '../../../components/overlaySelectTime';
+import InputTimer from '../../../components/inputTimer';
+import {format} from 'date-fns';
+import SaveIcon from '../../../components/saveIcon';
 
-export default function AddPrice() {
-  const [isFixedEnabled, setIsFixedEnabled] = useState(false);
+export default function AddPrice({navigation}) {
+  const [isFixedEnabled, setIsFixedEnabled] = useState(true);
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
-  const [quantityDynamic, setQuantityDynamic] = useState(['1']);
+  const [quantityDynamic, setQuantityDynamic] = useState([
+    {id: format(new Date(), 'HHmmssSSS'), start: '', end: '', price: ''},
+  ]);
+  const [typePrice, setTypePrice] = useState(0);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Home',
+      headerRight: () => <SaveIcon onPress={() => console.log('oi')} />,
+    });
+  }, [navigation]);
 
   const handleSwitches = (type) => {
     if (type === 'fixed') {
+      setTypePrice(1);
       if (!isFixedEnabled && isDynamicEnabled) {
         setIsDynamicEnabled(false);
       }
       setIsFixedEnabled((previousState) => !previousState);
     } else {
+      setTypePrice(2);
       if (!isDynamicEnabled && isFixedEnabled) {
         setIsFixedEnabled(false);
       }
@@ -42,85 +57,71 @@ export default function AddPrice() {
       </View>
     ) : null;
   };
-  const inputDynamicPrice = (item, idx) => {
-    return (
-      <View key={idx} style={styles.inputMainContainerDynamic}>
-        <View style={{width: '30%'}}>
-          <Text style={{paddingLeft: 10}}>De:</Text>
-          <Input
-            inputContainerStyle={styles.inputContainerDynamic}
-            leftIconContainerStyle={styles.inputIconContainerDynamic}
-            leftIcon={<Icon name="time-outline" size={18} color="black" />}
-          />
-        </View>
-        <View style={{width: '30%'}}>
-          <Text style={{paddingLeft: 10}}>Até:</Text>
-          <Input
-            inputContainerStyle={styles.inputContainerDynamic}
-            leftIconContainerStyle={styles.inputIconContainerDynamic}
-            leftIcon={<Icon name="time-outline" size={18} color="black" />}
-          />
-        </View>
-        <View style={{width: '30%'}}>
-          <Text style={{paddingLeft: 10}}>Preço:</Text>
-          <Input
-            inputContainerStyle={styles.inputContainerDynamic}
-            leftIconContainerStyle={styles.inputIconContainerDynamic}
-            leftIcon={<Icon name="cash-outline" size={18} color="black" />}
-          />
-        </View>
-        <TouchableOpacity
-          onPress={() => removeSpecificItem(idx)}
-          style={{justifyContent: 'center', alignSelf: 'center'}}>
-          <Icon name="remove-circle-outline" size={22} color="#9E8170" />
-        </TouchableOpacity>
-      </View>
-    );
+
+  const removeSpecificItem = (itemId) => {
+    const newArray = quantityDynamic.filter((item) => {
+      return itemId !== item.id;
+    });
+    setQuantityDynamic(newArray);
   };
 
-  const removeSpecificItem = (idx) => {
-    setQuantityDynamic(quantityDynamic.filter((item, idxF) => idx !== idxF));
+  const getInputValue = (item) => {
+    const resultItem = quantityDynamic.find(
+      (element) => element.id === item.id,
+    );
+    return resultItem;
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <DateButtonsCalendar />
-      <View style={styles.containerTexts}>
-        <Text style={styles.text}>Valor Fixo: </Text>
-        <Switch
-          trackColor={{false: '#767577', true: '#9E8170'}}
-          thumbColor={isFixedEnabled ? '#832D25' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => handleSwitches('fixed')}
-          value={isFixedEnabled}
-        />
-      </View>
-      {inputFixedPrice()}
-      <Divider style={styles.divider} />
-      <View style={styles.containerTexts}>
-        <Text style={styles.text}>Valor Dinâmico: </Text>
-        <Switch
-          trackColor={{false: '#767577', true: '#9E8170'}}
-          thumbColor={isDynamicEnabled ? '#832D25' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => handleSwitches('dynamic')}
-          value={isDynamicEnabled}
-        />
-      </View>
-      {isDynamicEnabled
-        ? quantityDynamic.map((item, idx) => inputDynamicPrice(item, idx))
-        : null}
-      {isDynamicEnabled ? (
-        <TouchableOpacity
-          style={{justifyContent: 'center', alignSelf: 'center'}}
-          onPress={() =>
-            setQuantityDynamic((previousState) => [...previousState, ''])
-          }>
-          <Icon name="add-circle-outline" size={22} color="#41484F" />
-        </TouchableOpacity>
-      ) : null}
-
-      {/* <OverlaySelectTime visible={true} /> */}
+      <ScrollView>
+        <DateButtonsCalendar />
+        <View style={styles.containerTexts}>
+          <Text style={styles.text}>Valor Fixo: </Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#9E8170'}}
+            thumbColor={isFixedEnabled ? '#832D25' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => handleSwitches('fixed')}
+            value={isFixedEnabled}
+          />
+        </View>
+        {inputFixedPrice()}
+        <Divider style={styles.divider} />
+        <View style={styles.containerTexts}>
+          <Text style={styles.text}>Valor Dinâmico: </Text>
+          <Switch
+            trackColor={{false: '#767577', true: '#9E8170'}}
+            thumbColor={isDynamicEnabled ? '#832D25' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={() => handleSwitches('dynamic')}
+            value={isDynamicEnabled}
+          />
+        </View>
+        {isDynamicEnabled
+          ? quantityDynamic.map((item) => (
+              <InputTimer
+                startValue={getInputValue(item).start}
+                endValue={getInputValue(item).end}
+                priceValue={getInputValue(item).price}
+                key={item.id}
+                removeItem={() => removeSpecificItem(item.id)}
+              />
+            ))
+          : null}
+        {isDynamicEnabled ? (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() =>
+              setQuantityDynamic((previousState) => [
+                ...previousState,
+                {id: format(new Date(), 'HHmmssSSS')},
+              ])
+            }>
+            <Icon name="add-circle-outline" size={22} color="#41484F" />
+          </TouchableOpacity>
+        ) : null}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -155,15 +156,9 @@ const styles = StyleSheet.create({
   inputIconContainerFixed: {
     paddingLeft: 10,
   },
-  inputContainerDynamic: {
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  inputMainContainerDynamic: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  inputIconContainerDynamic: {
-    paddingLeft: 10,
+  addButton: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginBottom: 40,
   },
 });

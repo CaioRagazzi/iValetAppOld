@@ -30,7 +30,7 @@ export default function HomeScreen({navigation}) {
           setIsCaixaOpened(false);
         }
       });
-  }, [companyId]);
+  }, [companyId, navigation]);
 
   const openCloseCaixa = () => {
     if (isCaixaOpened) {

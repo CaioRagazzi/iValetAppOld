@@ -15,7 +15,7 @@ export default function InputTimer(props) {
           leftIcon={<Icon name="time-outline" size={18} color="black" />}
           keyboardType="numeric"
           value={props.startValue}
-          onChangeText={(text) => setValues({...values, start: text})}
+          onChangeText={(text) => props.onStartChangeText(text)}
         />
       </View>
       <View style={styles.subMainContainer}>
@@ -26,7 +26,7 @@ export default function InputTimer(props) {
           leftIcon={<Icon name="time-outline" size={18} color="black" />}
           keyboardType="numeric"
           value={props.endValue}
-          onChangeText={(text) => setValues({...values, end: text})}
+          onChangeText={(text) => props.onEndChangeText(text)}
         />
       </View>
       <View style={styles.subMainContainer}>
@@ -38,7 +38,7 @@ export default function InputTimer(props) {
           leftIcon={<Icon name="cash-outline" size={18} color="black" />}
           keyboardType="numeric"
           value={props.priceValue}
-          onChangeText={(text) => setValues({...values, price: text})}
+          onChangeText={(text) => props.onPriceChangeText(text)}
         />
       </View>
       <TouchableOpacity

@@ -30,12 +30,13 @@ export default function AddPrice({navigation}) {
   const [fixedValue, setfixedValue] = useState('');
 
   useEffect(() => {
+    console.log(quantityDynamic);
     const save = () => {
+      if (!selectedWeekDays) {
+        showWarning('Favor preencher pelo menos um dia da semana');
+        return;
+      }
       if (typePrice === 1) {
-        if (!selectedWeekDays) {
-          showWarning('Favor preencher pelo menos um dia da semana');
-          return;
-        }
         if (!fixedValue) {
           showWarning('Favor preencher o campo valor');
           return;
@@ -54,12 +55,14 @@ export default function AddPrice({navigation}) {
           .catch((err) => {
             console.log(err.response.data);
           });
+      } else {
+        quantityDynamic.map((item) => {
+          if (!item.start || !item.end || !item.price) {
+            showWarning('Favor preencher todos os campos!');
+            return;
+          }
+        });
       }
-      console.log(typePrice);
-      console.log(quantityDynamic);
-      console.log(selectedWeekDays);
-      console.log(companyId);
-      console.log(format(new Date(), 'HHmmssSSS'));
     };
     navigation.setOptions({
       title: 'Home',
@@ -123,6 +126,39 @@ export default function AddPrice({navigation}) {
     return resultItem;
   };
 
+  const setStartInputValue = (item, value) => {
+    const newArray = [...quantityDynamic];
+    newArray.forEach((element) => {
+      if (element.id === item.id) {
+        element.start = value;
+      }
+    });
+
+    setQuantityDynamic(newArray);
+  };
+
+  const setEndInputValue = (item, value) => {
+    const newArray = [...quantityDynamic];
+    newArray.forEach((element) => {
+      if (element.id === item.id) {
+        element.end = value;
+      }
+    });
+
+    setQuantityDynamic(newArray);
+  };
+
+  const setPriceInputValue = (item, value) => {
+    const newArray = [...quantityDynamic];
+    newArray.forEach((element) => {
+      if (element.id === item.id) {
+        element.price = value;
+      }
+    });
+
+    setQuantityDynamic(newArray);
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView contentContainerStyle={{flexGrow: 1}} scrollEnabled={true}>
@@ -155,8 +191,11 @@ export default function AddPrice({navigation}) {
           ? quantityDynamic.map((item) => (
               <InputTimer
                 startValue={getInputValue(item).start}
+                onStartChangeText={(value) => setStartInputValue(item, value)}
                 endValue={getInputValue(item).end}
+                onEndChangeText={(value) => setEndInputValue(item, value)}
                 priceValue={getInputValue(item).price}
+                onPriceChangeText={(value) => setPriceInputValue(item, value)}
                 key={item.id}
                 removeItem={() => removeSpecificItem(item.id)}
               />

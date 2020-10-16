@@ -18,7 +18,7 @@ import {AuthContext} from '../../../contexts/auth';
 import axios from '../../../services/axios';
 import {showWarning} from '../../../components/toast';
 
-export default function AddPrice({navigation}) {
+export default function AddPrice({navigation, route}) {
   const {companyId} = useContext(AuthContext);
   const [isFixedEnabled, setIsFixedEnabled] = useState(true);
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
@@ -29,7 +29,14 @@ export default function AddPrice({navigation}) {
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
   const [fixedValue, setfixedValue] = useState('');
 
+  const [isEdit, setIsEdit] = useState(false);
+  const [initialValues, setInitialValues] = useState({});
+
   useEffect(() => {
+    if (route.params) {
+      setIsEdit(true);
+      getPrices(route.params);
+    }
     const save = () => {
       if (!selectedWeekDays) {
         showWarning('Favor preencher pelo menos um dia da semana');
@@ -90,7 +97,58 @@ export default function AddPrice({navigation}) {
     typePrice,
     companyId,
     fixedValue,
+    route.params,
   ]);
+
+  const getPrices = (price) => {
+    axios
+      .get(`price/uniqueid/${price.uniqueIdPrice}`)
+      .then((res) => {
+        if (res.data[0].type === 1) {
+          setfixedValue(res.data[0].price);
+          const splited = res.data[0].weekDay.split('|');
+          let initialValues = {
+            segunda: false,
+            terca: false,
+            quarta: false,
+            quinta: false,
+            sexta: false,
+            sabado: false,
+            domingo: false,
+          };
+          splited.map((item) => {
+            switch (item) {
+              case 'M':
+                initialValues.segunda = true;
+                break;
+              case 'TU':
+                initialValues.terca = true;
+                break;
+              case 'W':
+                initialValues.quarta = true;
+                break;
+              case 'TH':
+                initialValues.quinta = true;
+                break;
+              case 'F':
+                initialValues.sexta = true;
+                break;
+              case 'SA':
+                initialValues.sabado = true;
+                break;
+              case 'SU':
+                initialValues.domingo = true;
+                break;
+            }
+          });
+
+          setInitialValues(initialValues);
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
 
   const handleSwitches = (type) => {
     if (type === 'fixed') {
@@ -174,6 +232,7 @@ export default function AddPrice({navigation}) {
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView contentContainerStyle={{flexGrow: 1}} scrollEnabled={true}>
         <DateButtonsCalendar
+          initialValues={initialValues}
           OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
         />
         <View style={styles.containerTexts}>

@@ -12,6 +12,14 @@ export default function DateButtonsCalendar(props) {
   const [domingo, setDomingo] = useState(false);
 
   useEffect(() => {
+    setSegunda(props.initialValues.segunda);
+    setTerca(props.initialValues.terca);
+    setQuarta(props.initialValues.quarta);
+    setQuinta(props.initialValues.quinta);
+    setSexta(props.initialValues.sexta);
+    setSabado(props.initialValues.sabado);
+    setDomingo(props.initialValues.domingo);
+
     const selectedWeekDays = () => {
       let string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
         quarta ? 'W|' : ''

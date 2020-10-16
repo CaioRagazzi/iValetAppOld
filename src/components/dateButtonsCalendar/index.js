@@ -13,14 +13,24 @@ export default function DateButtonsCalendar(props) {
 
   useEffect(() => {
     const selectedWeekDays = () => {
-      const string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
+      let string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
         quarta ? 'W|' : ''
       }${quinta ? 'TH|' : ''}${sexta ? 'F|' : ''}${sabado ? 'SA|' : ''}${
         domingo ? 'SU|' : ''
       }`;
 
-      props.OnWeekDayChange(string);
+      const formatedString = deletePipeIfLast(string);
+      props.OnWeekDayChange(formatedString);
     };
+
+    const deletePipeIfLast = (text) => {
+      if (text[text.length - 1] === '|') {
+        const newString = text.slice(0, -1);
+        return newString;
+      }
+      return text;
+    };
+
     selectedWeekDays();
   }, [segunda, terca, quarta, quinta, sexta, sabado, domingo, props]);
 

@@ -19,12 +19,10 @@ export default function CarDetails({route, navigation}) {
         },
       })
       .then((res) => {
-        console.log(res.data);
         navigation.popToTop();
         navigation.navigate('Saida');
       })
       .catch((err) => {
-        console.log(err.response.data);
       });
   };
 

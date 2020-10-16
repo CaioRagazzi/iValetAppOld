@@ -43,9 +43,7 @@ export default function HomeScreen({navigation}) {
         .then((res) => {
           setIsCaixaOpened(false);
         })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+        .catch((err) => {});
     } else {
       axios
         .post('caixa/openCaixa', null, {
@@ -56,9 +54,7 @@ export default function HomeScreen({navigation}) {
         .then((res) => {
           setIsCaixaOpened(true);
         })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+        .catch((err) => {});
     }
   };
 

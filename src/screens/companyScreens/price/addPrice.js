@@ -30,13 +30,13 @@ export default function AddPrice({navigation}) {
   const [fixedValue, setfixedValue] = useState('');
 
   useEffect(() => {
-    console.log(quantityDynamic);
     const save = () => {
       if (!selectedWeekDays) {
         showWarning('Favor preencher pelo menos um dia da semana');
         return;
       }
       if (typePrice === 1) {
+        let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
         if (!fixedValue) {
           showWarning('Favor preencher o campo valor');
           return;
@@ -47,20 +47,31 @@ export default function AddPrice({navigation}) {
             weekDay: selectedWeekDays,
             companyId,
             price: +fixedValue,
-            uniqueIdPrice: format(new Date(), 'HHmmssSSS'),
+            uniqueIdPrice: uniqueIdPrice,
           })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err.response.data);
-          });
+          .then((res) => {})
+          .catch((err) => {});
       } else {
         quantityDynamic.map((item) => {
           if (!item.start || !item.end || !item.price) {
             showWarning('Favor preencher todos os campos!');
             return;
           }
+        });
+        let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
+        quantityDynamic.map((item) => {
+          axios
+            .post('price', {
+              type: 2,
+              to: +item.start,
+              from: +item.end,
+              weekDay: selectedWeekDays,
+              companyId,
+              price: +item.price,
+              uniqueIdPrice: uniqueIdPrice,
+            })
+            .then((res) => {})
+            .catch((err) => {});
         });
       }
     };

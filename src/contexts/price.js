@@ -1,10 +1,13 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useState, useContext} from 'react';
 import axios from '../services/axios';
 import {format} from 'date-fns';
+import {AuthContext} from '../contexts/auth';
+import {showWarning} from '../components/toast';
 
 export const PriceContext = createContext();
 
 export const PriceProvider = ({children}) => {
+  const {companyId} = useContext(AuthContext);
   const [segunda, setSegunda] = useState(false);
   const [terca, setTerca] = useState(false);
   const [quarta, setQuarta] = useState(false);
@@ -21,8 +24,6 @@ export const PriceProvider = ({children}) => {
     let priceReturn = [];
     await axios.get(`price/uniqueid/${uniqueId}`).then((res) => {
       priceReturn = res.data;
-      //   if (res.data[0].type === 1) {
-      //   }
     });
 
     return priceReturn;
@@ -90,6 +91,62 @@ export const PriceProvider = ({children}) => {
     });
   };
 
+  const createFixedPrice = async (weekDays) => {
+    let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
+    let created = false;
+    await axios
+      .post('price', {
+        type: 1,
+        weekDay: weekDays,
+        companyId,
+        price: +fixedValue,
+        uniqueIdPrice: uniqueIdPrice,
+      })
+      .then(() => {
+        created = true;
+      })
+      .catch((err) => {
+        if (err.response.data.message === 'Same day has already been added!') {
+          showWarning('Já existe uma configuração para esse mesmo dia!');
+        }
+        created = false;
+      });
+
+    return created;
+  };
+
+  const createDynamicPrice = async (weekDays) => {
+    let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
+    let created = false;
+    await Promise.all(
+      quantityDynamic.map(async (item) => {
+        await axios
+          .post('price', {
+            type: 2,
+            to: +item.start,
+            from: +item.end,
+            weekDay: weekDays,
+            companyId,
+            price: +item.price,
+            uniqueIdPrice: uniqueIdPrice,
+          })
+          .then(() => {
+            created = true;
+          })
+          .catch((err) => {
+            if (
+              err.response.data.message === 'Same day has already been added!'
+            ) {
+              showWarning('Já existe uma configuração para esse mesmo dia!');
+            }
+            created = false;
+          });
+      }),
+    );
+
+    return created;
+  };
+
   const cleanFields = () => {
     setSegunda(false);
     setTerca(false);
@@ -131,6 +188,8 @@ export const PriceProvider = ({children}) => {
         setIsDynamicEnabled,
         quantityDynamic,
         setQuantityDynamic,
+        createFixedPrice,
+        createDynamicPrice,
       }}>
       {children}
     </PriceContext.Provider>

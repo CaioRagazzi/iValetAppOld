@@ -1,15 +1,17 @@
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useEffect, useContext, useState, useCallback} from 'react';
 import {View, FlatList} from 'react-native';
 import HeaderPlusIcon from '../../../components/HeaderPlusIcon';
 import axios from '../../../services/axios';
 import {AuthContext} from '../../../contexts/auth';
 import {ListItem} from 'react-native-elements';
 import {PriceContext} from '../../../contexts/price';
+import {showWarning} from '../../../components/toast';
 
 export default function Prices({navigation}) {
   const {companyId} = useContext(AuthContext);
   const {populateFields} = useContext(PriceContext);
   const [prices, setPrices] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -19,15 +21,30 @@ export default function Prices({navigation}) {
       ),
     });
 
-    axios
+    getPrices();
+  }, [navigation, companyId, getPrices]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getPrices();
+    });
+
+    return unsubscribe;
+  }, [navigation, getPrices]);
+
+  const getPrices = useCallback(async () => {
+    setLoading(true);
+    await axios
       .get(`price/${companyId}`)
       .then((res) => {
         setPrices(res.data);
+        setLoading(false);
       })
-      .catch((err) => {
-        console.log(err.response.data);
+      .catch(() => {
+        showWarning('Erro buscando preços');
+        setLoading(false);
       });
-  }, [navigation, companyId]);
+  }, [companyId]);
 
   const goToEditPrice = (price) => {
     populateFields(price);
@@ -85,6 +102,8 @@ export default function Prices({navigation}) {
         data={prices}
         renderItem={renderItem}
         keyExtractor={(item) => item.uniqueIdPrice}
+        refreshing={loading}
+        onRefresh={() => getPrices()}
       />
     </View>
   );

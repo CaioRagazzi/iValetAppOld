@@ -14,14 +14,11 @@ import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
 import InputTimer from '../../../components/inputTimer';
 import {format} from 'date-fns';
 import SaveIcon from '../../../components/saveIcon';
-import {AuthContext} from '../../../contexts/auth';
 import {PriceContext} from '../../../contexts/price';
-import axios from '../../../services/axios';
 import {showWarning} from '../../../components/toast';
 import {HeaderBackButton} from '@react-navigation/stack';
 
 export default function AddPrice({navigation, route}) {
-  const {companyId} = useContext(AuthContext);
   const {
     fixedValue,
     setfixedValue,
@@ -32,62 +29,59 @@ export default function AddPrice({navigation, route}) {
     setIsDynamicEnabled,
     quantityDynamic,
     setQuantityDynamic,
+    createFixedPrice,
+    createDynamicPrice,
   } = useContext(PriceContext);
 
   const [typePrice, setTypePrice] = useState(1);
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
-  // const [fixedValue, setfixedValue] = useState('');
-
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     if (route.params) {
       setIsEdit(true);
     } else {
+      setIsEdit(false);
     }
-    const save = () => {
+    const save = async () => {
       if (!selectedWeekDays) {
         showWarning('Favor preencher pelo menos um dia da semana');
         return;
       }
-      if (typePrice === 1) {
-        let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
+      let created = false;
+      if (typePrice === 1 && !isEdit) {
         if (!fixedValue) {
           showWarning('Favor preencher o campo valor');
           return;
         }
-        axios
-          .post('price', {
-            type: 1,
-            weekDay: selectedWeekDays,
-            companyId,
-            price: +fixedValue,
-            uniqueIdPrice: uniqueIdPrice,
-          })
-          .then((res) => {})
-          .catch((err) => {});
+        await createFixedPrice(selectedWeekDays).then((res) => {
+          created = res;
+        });
+        if (!created) {
+          return;
+        }
+        navigation.goBack();
+        cleanFields();
       } else {
+        let isFieldsInvalid = false;
         quantityDynamic.map((item) => {
           if (!item.start || !item.end || !item.price) {
             showWarning('Favor preencher todos os campos!');
-            return;
+            isFieldsInvalid = true;
           }
         });
-        let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
-        quantityDynamic.map((item) => {
-          axios
-            .post('price', {
-              type: 2,
-              to: +item.start,
-              from: +item.end,
-              weekDay: selectedWeekDays,
-              companyId,
-              price: +item.price,
-              uniqueIdPrice: uniqueIdPrice,
-            })
-            .then((res) => {})
-            .catch((err) => {});
+        if (isFieldsInvalid) {
+          return;
+        }
+        await createDynamicPrice(selectedWeekDays).then((res) => {
+          console.log(res);
+          created = res;
         });
+        if (!created) {
+          return;
+        }
+        navigation.goBack();
+        cleanFields();
       }
     };
     navigation.setOptions({
@@ -111,11 +105,13 @@ export default function AddPrice({navigation, route}) {
     quantityDynamic,
     selectedWeekDays,
     typePrice,
-    companyId,
     fixedValue,
     route.params,
     cleanFields,
     setQuantityDynamic,
+    isEdit,
+    createDynamicPrice,
+    createFixedPrice,
   ]);
 
   const handleSwitches = (type) => {
@@ -130,6 +126,16 @@ export default function AddPrice({navigation, route}) {
       if (!isDynamicEnabled && isFixedEnabled) {
         setIsFixedEnabled(false);
       }
+      if (quantityDynamic.length === 0) {
+        setQuantityDynamic([
+          {
+            id: format(new Date(), 'HHmmssSSS'),
+            start: '',
+            end: '',
+            price: '',
+          },
+        ]);
+      }
       setIsDynamicEnabled((previousState) => !previousState);
     }
   };
@@ -143,6 +149,7 @@ export default function AddPrice({navigation, route}) {
           leftIconContainerStyle={styles.inputIconContainerFixed}
           leftIcon={<Icon name="cash-outline" size={24} color="black" />}
           value={fixedValue}
+          keyboardType="number-pad"
           onChangeText={(text) => setfixedValue(text)}
         />
       </View>
@@ -198,7 +205,10 @@ export default function AddPrice({navigation, route}) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView contentContainerStyle={{flexGrow: 1}} scrollEnabled={true}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        scrollEnabled={true}
+        keyboardShouldPersistTaps="handled">
         <DateButtonsCalendar
           OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
         />

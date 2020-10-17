@@ -4,9 +4,11 @@ import HeaderPlusIcon from '../../../components/HeaderPlusIcon';
 import axios from '../../../services/axios';
 import {AuthContext} from '../../../contexts/auth';
 import {ListItem} from 'react-native-elements';
+import {PriceContext} from '../../../contexts/price';
 
 export default function Prices({navigation}) {
   const {companyId} = useContext(AuthContext);
+  const {populateFields} = useContext(PriceContext);
   const [prices, setPrices] = useState([]);
 
   useEffect(() => {
@@ -27,10 +29,13 @@ export default function Prices({navigation}) {
       });
   }, [navigation, companyId]);
 
+  const goToEditPrice = (price) => {
+    populateFields(price);
+    navigation.navigate('AddPrice', {edit: true});
+  };
+
   const renderItem = ({item}) => (
-    <ListItem
-      bottomDivider
-      onPress={() => navigation.navigate('AddPrice', item)}>
+    <ListItem bottomDivider onPress={() => goToEditPrice(item)}>
       <ListItem.Content>
         <ListItem.Title>{getWeekDays(item.weekDay)}</ListItem.Title>
         <ListItem.Subtitle>

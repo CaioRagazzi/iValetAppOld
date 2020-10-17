@@ -15,27 +15,35 @@ import InputTimer from '../../../components/inputTimer';
 import {format} from 'date-fns';
 import SaveIcon from '../../../components/saveIcon';
 import {AuthContext} from '../../../contexts/auth';
+import {PriceContext} from '../../../contexts/price';
 import axios from '../../../services/axios';
 import {showWarning} from '../../../components/toast';
+import {HeaderBackButton} from '@react-navigation/stack';
 
 export default function AddPrice({navigation, route}) {
   const {companyId} = useContext(AuthContext);
-  const [isFixedEnabled, setIsFixedEnabled] = useState(true);
-  const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
-  const [quantityDynamic, setQuantityDynamic] = useState([
-    {id: format(new Date(), 'HHmmssSSS'), start: '', end: '', price: ''},
-  ]);
+  const {
+    fixedValue,
+    setfixedValue,
+    cleanFields,
+    isFixedEnabled,
+    setIsFixedEnabled,
+    isDynamicEnabled,
+    setIsDynamicEnabled,
+    quantityDynamic,
+    setQuantityDynamic,
+  } = useContext(PriceContext);
+
   const [typePrice, setTypePrice] = useState(1);
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
-  const [fixedValue, setfixedValue] = useState('');
+  // const [fixedValue, setfixedValue] = useState('');
 
   const [isEdit, setIsEdit] = useState(false);
-  const [initialValues, setInitialValues] = useState({});
 
   useEffect(() => {
     if (route.params) {
       setIsEdit(true);
-      getPrices(route.params);
+    } else {
     }
     const save = () => {
       if (!selectedWeekDays) {
@@ -89,6 +97,14 @@ export default function AddPrice({navigation, route}) {
           <SaveIcon onPress={() => save()} />
         </TouchableOpacity>
       ),
+      headerLeft: () => (
+        <HeaderBackButton
+          onPress={() => {
+            navigation.goBack();
+            cleanFields();
+          }}
+        />
+      ),
     });
   }, [
     navigation,
@@ -98,57 +114,9 @@ export default function AddPrice({navigation, route}) {
     companyId,
     fixedValue,
     route.params,
+    cleanFields,
+    setQuantityDynamic,
   ]);
-
-  const getPrices = (price) => {
-    axios
-      .get(`price/uniqueid/${price.uniqueIdPrice}`)
-      .then((res) => {
-        if (res.data[0].type === 1) {
-          setfixedValue(res.data[0].price);
-          const splited = res.data[0].weekDay.split('|');
-          let initialValues = {
-            segunda: false,
-            terca: false,
-            quarta: false,
-            quinta: false,
-            sexta: false,
-            sabado: false,
-            domingo: false,
-          };
-          splited.map((item) => {
-            switch (item) {
-              case 'M':
-                initialValues.segunda = true;
-                break;
-              case 'TU':
-                initialValues.terca = true;
-                break;
-              case 'W':
-                initialValues.quarta = true;
-                break;
-              case 'TH':
-                initialValues.quinta = true;
-                break;
-              case 'F':
-                initialValues.sexta = true;
-                break;
-              case 'SA':
-                initialValues.sabado = true;
-                break;
-              case 'SU':
-                initialValues.domingo = true;
-                break;
-            }
-          });
-
-          setInitialValues(initialValues);
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-      });
-  };
 
   const handleSwitches = (type) => {
     if (type === 'fixed') {
@@ -232,7 +200,6 @@ export default function AddPrice({navigation, route}) {
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView contentContainerStyle={{flexGrow: 1}} scrollEnabled={true}>
         <DateButtonsCalendar
-          initialValues={initialValues}
           OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
         />
         <View style={styles.containerTexts}>

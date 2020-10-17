@@ -1,25 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {TouchableOpacity, SafeAreaView, StyleSheet} from 'react-native';
 import {Text as TextEl} from 'react-native-elements';
+import {PriceContext} from '../../contexts/price';
 
 export default function DateButtonsCalendar(props) {
-  const [segunda, setSegunda] = useState(false);
-  const [terca, setTerca] = useState(false);
-  const [quarta, setQuarta] = useState(false);
-  const [quinta, setQuinta] = useState(false);
-  const [sexta, setSexta] = useState(false);
-  const [sabado, setSabado] = useState(false);
-  const [domingo, setDomingo] = useState(false);
+  const {
+    segunda,
+    setSegunda,
+    terca,
+    setTerca,
+    quarta,
+    setQuarta,
+    quinta,
+    setQuinta,
+    sexta,
+    setSexta,
+    sabado,
+    setSabado,
+    domingo,
+    setDomingo,
+  } = useContext(PriceContext);
 
   useEffect(() => {
-    setSegunda(props.initialValues.segunda);
-    setTerca(props.initialValues.terca);
-    setQuarta(props.initialValues.quarta);
-    setQuinta(props.initialValues.quinta);
-    setSexta(props.initialValues.sexta);
-    setSabado(props.initialValues.sabado);
-    setDomingo(props.initialValues.domingo);
-
     const selectedWeekDays = () => {
       let string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
         quarta ? 'W|' : ''

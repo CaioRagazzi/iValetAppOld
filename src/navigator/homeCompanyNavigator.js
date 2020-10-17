@@ -13,6 +13,7 @@ import FinishedScreen from '../screens/companyScreens/finished';
 import PricesScreen from '../screens/companyScreens/price/prices';
 import AddPriceScreen from '../screens/companyScreens/price/addPrice';
 import {GatewayProvider} from '../contexts/gateway';
+import {PriceProvider} from '../contexts/price';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -107,14 +108,16 @@ function FinishedStackNavigator() {
 
 function PricesStackNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: {backgroundColor: '#FCFCFC'},
-        headerTitleStyle: {color: '#41484F'},
-      }}>
-      <Stack.Screen name="Prices" component={PricesScreen} />
-      <Stack.Screen name="AddPrice" component={AddPriceScreen} />
-    </Stack.Navigator>
+    <PriceProvider>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {backgroundColor: '#FCFCFC'},
+          headerTitleStyle: {color: '#41484F'},
+        }}>
+        <Stack.Screen name="Prices" component={PricesScreen} />
+        <Stack.Screen name="AddPrice" component={AddPriceScreen} />
+      </Stack.Navigator>
+    </PriceProvider>
   );
 }
 

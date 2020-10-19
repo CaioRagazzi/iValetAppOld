@@ -19,6 +19,8 @@ export const PriceProvider = ({children}) => {
   const [isFixedEnabled, setIsFixedEnabled] = useState(true);
   const [isDynamicEnabled, setIsDynamicEnabled] = useState(false);
   const [quantityDynamic, setQuantityDynamic] = useState([]);
+  const [hasMaxValue, setHasMaxValue] = useState(false);
+  const [maxValue, setMaxValue] = useState('');
 
   const getPriceByUniqueId = async (uniqueId) => {
     let priceReturn = [];
@@ -44,6 +46,10 @@ export const PriceProvider = ({children}) => {
       setIsDynamicEnabled(true);
       setIsFixedEnabled(false);
       populateDynamicFields(priceReturn);
+      if (priceReturn[0].maxPriceValue) {
+        setHasMaxValue(true);
+        setMaxValue(priceReturn[0].maxPriceValue);
+      }
     }
   };
 
@@ -129,6 +135,7 @@ export const PriceProvider = ({children}) => {
             companyId,
             price: +item.price,
             uniqueIdPrice: uniqueIdPrice,
+            maxPriceValue: hasMaxValue ? +maxValue : undefined,
           })
           .then(() => {
             created = true;
@@ -159,6 +166,8 @@ export const PriceProvider = ({children}) => {
     setIsDynamicEnabled(false);
     setQuantityDynamic([]);
     setfixedValue('');
+    setHasMaxValue(false);
+    setMaxValue('');
   };
 
   return (
@@ -190,6 +199,10 @@ export const PriceProvider = ({children}) => {
         setQuantityDynamic,
         createFixedPrice,
         createDynamicPrice,
+        hasMaxValue,
+        setHasMaxValue,
+        maxValue,
+        setMaxValue,
       }}>
       {children}
     </PriceContext.Provider>

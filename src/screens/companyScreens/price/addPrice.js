@@ -17,6 +17,7 @@ import SaveIcon from '../../../components/saveIcon';
 import {PriceContext} from '../../../contexts/price';
 import {showWarning} from '../../../components/toast';
 import {HeaderBackButton} from '@react-navigation/stack';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function AddPrice({navigation, route}) {
   const {
@@ -31,6 +32,10 @@ export default function AddPrice({navigation, route}) {
     setQuantityDynamic,
     createFixedPrice,
     createDynamicPrice,
+    hasMaxValue,
+    setHasMaxValue,
+    maxValue,
+    setMaxValue,
   } = useContext(PriceContext);
 
   const [typePrice, setTypePrice] = useState(1);
@@ -64,6 +69,10 @@ export default function AddPrice({navigation, route}) {
         cleanFields();
       } else {
         let isFieldsInvalid = false;
+        if (hasMaxValue && maxValue === '') {
+          showWarning('Favor preencher o campo valor máximo!');
+          isFieldsInvalid = true;
+        }
         quantityDynamic.map((item) => {
           if (!item.start || !item.end || !item.price) {
             showWarning('Favor preencher todos os campos!');
@@ -73,10 +82,11 @@ export default function AddPrice({navigation, route}) {
         if (isFieldsInvalid) {
           return;
         }
-        await createDynamicPrice(selectedWeekDays).then((res) => {
-          console.log(res);
-          created = res;
-        });
+        await createDynamicPrice(selectedWeekDays, hasMaxValue, maxValue).then(
+          (res) => {
+            created = res;
+          },
+        );
         if (!created) {
           return;
         }
@@ -112,6 +122,8 @@ export default function AddPrice({navigation, route}) {
     isEdit,
     createDynamicPrice,
     createFixedPrice,
+    hasMaxValue,
+    maxValue,
   ]);
 
   const handleSwitches = (type) => {
@@ -234,6 +246,33 @@ export default function AddPrice({navigation, route}) {
             value={isDynamicEnabled}
           />
         </View>
+        {isDynamicEnabled ? (
+          <View>
+            <View style={styles.containerMaxValue}>
+              <CheckBox
+                disabled={false}
+                value={hasMaxValue}
+                onValueChange={(inp) => setHasMaxValue(inp)}
+              />
+              <Text>Valor máximo</Text>
+            </View>
+            <View style={styles.subMainContainer}>
+              {hasMaxValue ? (
+                <Input
+                  labelStyle={{marginBottom: 15}}
+                  inputContainerStyle={styles.inputContainerMaxValue}
+                  leftIconContainerStyle={styles.inputIconContainerMaxValue}
+                  leftIcon={
+                    <Icon name="cash-outline" size={18} color="black" />
+                  }
+                  keyboardType="numeric"
+                  value={maxValue}
+                  onChangeText={(text) => setMaxValue(text)}
+                />
+              ) : null}
+            </View>
+          </View>
+        ) : null}
         {isDynamicEnabled
           ? quantityDynamic.map((item) => (
               <InputTimer
@@ -299,5 +338,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     marginBottom: 40,
+  },
+  inputContainerMaxValue: {
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    width: '50%',
+  },
+  inputIconContainerMaxValue: {
+    paddingLeft: 10,
+  },
+  containerMaxValue: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

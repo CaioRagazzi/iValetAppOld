@@ -21,6 +21,7 @@ export const PriceProvider = ({children}) => {
   const [quantityDynamic, setQuantityDynamic] = useState([]);
   const [hasMaxValue, setHasMaxValue] = useState(false);
   const [maxValue, setMaxValue] = useState('');
+  const [typePrice, setTypePrice] = useState(1);
 
   const getPriceByUniqueId = async (uniqueId) => {
     let priceReturn = [];
@@ -29,6 +30,32 @@ export const PriceProvider = ({children}) => {
     });
 
     return priceReturn;
+  };
+
+  const handleSwitches = (type) => {
+    if (type === 'fixed') {
+      setTypePrice(1);
+      if (!isFixedEnabled && isDynamicEnabled) {
+        setIsDynamicEnabled(false);
+      }
+      setIsFixedEnabled((previousState) => !previousState);
+    } else {
+      setTypePrice(2);
+      if (!isDynamicEnabled && isFixedEnabled) {
+        setIsFixedEnabled(false);
+      }
+      if (quantityDynamic.length === 0) {
+        setQuantityDynamic([
+          {
+            id: format(new Date(), 'HHmmssSSS'),
+            start: '',
+            end: '',
+            price: '',
+          },
+        ]);
+      }
+      setIsDynamicEnabled((previousState) => !previousState);
+    }
   };
 
   const populateFields = async (priceParam) => {
@@ -121,6 +148,8 @@ export const PriceProvider = ({children}) => {
     return created;
   };
 
+  const updateFixedPrice = async (weekDays) => {};
+
   const createDynamicPrice = async (weekDays) => {
     let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
     let created = false;
@@ -203,6 +232,9 @@ export const PriceProvider = ({children}) => {
         setHasMaxValue,
         maxValue,
         setMaxValue,
+        typePrice,
+        setTypePrice,
+        handleSwitches,
       }}>
       {children}
     </PriceContext.Provider>

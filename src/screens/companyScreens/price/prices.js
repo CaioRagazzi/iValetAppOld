@@ -9,7 +9,7 @@ import {showWarning} from '../../../components/toast';
 
 export default function Prices({navigation}) {
   const {companyId} = useContext(AuthContext);
-  const {populateFields} = useContext(PriceContext);
+  const {populateFields, setPrice} = useContext(PriceContext);
   const [prices, setPrices] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,6 +47,7 @@ export default function Prices({navigation}) {
   }, [companyId]);
 
   const goToEditPrice = (price) => {
+    setPrice(price);
     populateFields(price);
     navigation.navigate('AddPrice', {edit: true});
   };

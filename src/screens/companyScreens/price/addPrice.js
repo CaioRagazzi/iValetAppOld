@@ -2,11 +2,10 @@ import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Switch,
-  Text,
-  View,
   TouchableOpacity,
   ScrollView,
+  View,
+  BackHandler,
 } from 'react-native';
 import {Divider} from 'react-native-elements';
 import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
@@ -21,7 +20,6 @@ export default function AddPrice({navigation, route}) {
   const {
     fixedValue,
     cleanFields,
-    isDynamicEnabled,
     quantityDynamic,
     setQuantityDynamic,
     createFixedPrice,
@@ -30,11 +28,13 @@ export default function AddPrice({navigation, route}) {
     maxValue,
     updateFixedPrice,
     typePrice,
-    handleSwitches,
+    isFixedEnabled,
+    isDynamicEnabled,
+    isEdit,
+    setIsEdit,
   } = useContext(PriceContext);
 
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
-  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     if (route.params) {
@@ -68,7 +68,7 @@ export default function AddPrice({navigation, route}) {
         navigation.goBack();
         cleanFields();
       }
-      if (typePrice === 2 && !isEdit) {
+      if (typePrice === 2) {
         let isFieldsInvalid = false;
         if (hasMaxValue && maxValue === '') {
           showWarning('Favor preencher o campo valor máximo!');
@@ -83,11 +83,15 @@ export default function AddPrice({navigation, route}) {
         if (isFieldsInvalid) {
           return;
         }
-        await createDynamicPrice(selectedWeekDays, hasMaxValue, maxValue).then(
-          (res) => {
+        if (!isEdit) {
+          await createDynamicPrice(
+            selectedWeekDays,
+            hasMaxValue,
+            maxValue,
+          ).then((res) => {
             created = res;
-          },
-        );
+          });
+        }
         if (!created) {
           return;
         }
@@ -95,6 +99,10 @@ export default function AddPrice({navigation, route}) {
         cleanFields();
       }
     };
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      cleanFields();
+      return false;
+    });
     navigation.setOptions({
       title: 'Home',
       headerRight: () => (
@@ -111,6 +119,7 @@ export default function AddPrice({navigation, route}) {
         />
       ),
     });
+    return () => BackHandler.removeEventListener('hardwareBackPress');
   }, [
     navigation,
     quantityDynamic,
@@ -126,38 +135,37 @@ export default function AddPrice({navigation, route}) {
     hasMaxValue,
     maxValue,
     updateFixedPrice,
+    setIsEdit,
   ]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
+        contentContainerStyle={styles.containerScroll}
         scrollEnabled={true}
         keyboardShouldPersistTaps="handled">
         <DateButtonsCalendar
           OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
         />
 
-        <FixedContainer />
-
-        <Divider style={styles.divider} />
-        <View style={styles.containerTexts}>
-          <Text style={styles.text}>Valor Dinâmico: </Text>
-          <Switch
-            trackColor={{false: '#767577', true: '#9E8170'}}
-            thumbColor={isDynamicEnabled ? '#832D25' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={() => handleSwitches('dynamic')}
-            value={isDynamicEnabled}
-          />
-        </View>
-        <DynamicContainer />
+        {isEdit && isFixedEnabled ? <FixedContainer /> : null}
+        {isEdit && isDynamicEnabled ? <DynamicContainer /> : null}
+        {!isEdit ? (
+          <View>
+            <FixedContainer />
+            <Divider style={styles.divider} />
+            <DynamicContainer />
+          </View>
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  containerScroll: {
+    flexGrow: 1,
+  },
   mainContainer: {
     flex: 1,
     marginHorizontal: 10,

@@ -22,6 +22,8 @@ export const PriceProvider = ({children}) => {
   const [hasMaxValue, setHasMaxValue] = useState(false);
   const [maxValue, setMaxValue] = useState('');
   const [typePrice, setTypePrice] = useState(1);
+  const [isEdit, setIsEdit] = useState(false);
+  const [price, setPrice] = useState();
 
   const getPriceByUniqueId = async (uniqueId) => {
     let priceReturn = [];
@@ -148,7 +150,25 @@ export const PriceProvider = ({children}) => {
     return created;
   };
 
-  const updateFixedPrice = async (weekDays) => {};
+  const updateFixedPrice = async (weekDay) => {
+    let isRequestOk = false;
+    await axios
+      .put(`price/${price.id}`, {
+        weekDay,
+        price: +fixedValue,
+        uniqueIdPrice: price.uniqueIdPrice,
+        companyId: price.companyId,
+      })
+      .then((res) => {
+        console.log(res.data);
+        isRequestOk = true;
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        isRequestOk = false;
+      });
+    return isRequestOk;
+  };
 
   const createDynamicPrice = async (weekDays) => {
     let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
@@ -235,6 +255,10 @@ export const PriceProvider = ({children}) => {
         typePrice,
         setTypePrice,
         handleSwitches,
+        isEdit,
+        setIsEdit,
+        setPrice,
+        updateFixedPrice,
       }}>
       {children}
     </PriceContext.Provider>

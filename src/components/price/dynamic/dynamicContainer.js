@@ -1,47 +1,52 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Switch} from 'react-native';
 import {PriceContext} from '../../../contexts/price';
 import CheckBox from '@react-native-community/checkbox';
-import {Input} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/Ionicons';
 import InputTimeDynamic from './inputTimeDynamic';
 import ButtonAddNewInputDynamic from './buttonAddNewInputDynamic';
+import MaxValueInput from './maxValueInput';
 
 export default function DynamicContainer() {
   const {
     isDynamicEnabled,
     hasMaxValue,
     setHasMaxValue,
-    maxValue,
-    setMaxValue,
+    handleSwitches,
+    isEdit,
   } = useContext(PriceContext);
 
   const dynamicContainer = () => {
-    return isDynamicEnabled ? (
+    return (
       <View>
-        <View style={styles.containerMaxValue}>
-          <CheckBox
-            disabled={false}
-            value={hasMaxValue}
-            onValueChange={(inp) => setHasMaxValue(inp)}
-          />
-          <Text>Valor máximo</Text>
-        </View>
-        <View style={styles.subMainContainer}>
-          {hasMaxValue ? (
-            <Input
-              labelStyle={{marginBottom: 15}}
-              inputContainerStyle={styles.inputContainerMaxValue}
-              leftIconContainerStyle={styles.inputIconContainerMaxValue}
-              leftIcon={<Icon name="cash-outline" size={18} color="black" />}
-              keyboardType="numeric"
-              value={maxValue}
-              onChangeText={(text) => setMaxValue(text)}
+        <View style={styles.containerTexts}>
+          <Text style={styles.text}>Valor Dinâmico: </Text>
+          {!isEdit ? (
+            <Switch
+              trackColor={{false: '#767577', true: '#9E8170'}}
+              thumbColor={isDynamicEnabled ? '#832D25' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={() => handleSwitches('dynamic')}
+              value={isDynamicEnabled}
             />
           ) : null}
         </View>
+        {isDynamicEnabled ? (
+          <View>
+            <View style={styles.containerMaxValue}>
+              <CheckBox
+                disabled={false}
+                value={hasMaxValue}
+                onValueChange={(inp) => setHasMaxValue(inp)}
+              />
+              <Text>Valor máximo</Text>
+            </View>
+            <View style={styles.subMainContainer}>
+              <MaxValueInput />
+            </View>
+          </View>
+        ) : null}
       </View>
-    ) : null;
+    );
   };
 
   return (
@@ -54,15 +59,6 @@ export default function DynamicContainer() {
 }
 
 const styles = StyleSheet.create({
-  inputContainerMaxValue: {
-    marginTop: 10,
-    borderWidth: 1,
-    borderRadius: 5,
-    width: '50%',
-  },
-  inputIconContainerMaxValue: {
-    paddingLeft: 10,
-  },
   containerMaxValue: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -32,6 +32,7 @@ export default function AddPrice({navigation, route}) {
     isDynamicEnabled,
     isEdit,
     setIsEdit,
+    updateDynamicPrice,
   } = useContext(PriceContext);
 
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
@@ -91,6 +92,10 @@ export default function AddPrice({navigation, route}) {
           ).then((res) => {
             created = res;
           });
+        } else {
+          await updateDynamicPrice(selectedWeekDays).then((res) => {
+            created = res;
+          });
         }
         if (!created) {
           return;
@@ -136,6 +141,7 @@ export default function AddPrice({navigation, route}) {
     maxValue,
     updateFixedPrice,
     setIsEdit,
+    updateDynamicPrice,
   ]);
 
   return (

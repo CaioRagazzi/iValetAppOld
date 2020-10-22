@@ -87,10 +87,14 @@ export const PriceProvider = ({children}) => {
       setQuantityDynamic((previousState) => [
         ...previousState,
         {
-          id: format(new Date(), 'HHmmssSSS'),
+          id: priceItem.id,
           start: priceItem.to.toString(),
           end: priceItem.from.toString(),
           price: priceItem.price.toString(),
+          maxPriceValue: priceItem.maxPriceValue,
+          type: priceItem.type,
+          uniqueIdPrice: priceItem.uniqueIdPrice,
+          weekDay: priceItem.weekDay,
         },
       ]);
     });
@@ -159,14 +163,46 @@ export const PriceProvider = ({children}) => {
         uniqueIdPrice: price.uniqueIdPrice,
         companyId: price.companyId,
       })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         isRequestOk = true;
       })
       .catch((err) => {
-        console.log(err.response.data);
+        if (err.response.data.message === 'Same day has already been added!') {
+          showWarning('Já existe uma configuração para esse mesmo dia!');
+        }
         isRequestOk = false;
       });
+    return isRequestOk;
+  };
+
+  const updateDynamicPrice = async (weekDay) => {
+    let isRequestOk = false;
+    await Promise.all(
+      quantityDynamic.map(async (item) => {
+        await axios
+          .put(`price/${item.id}`, {
+            weekDay,
+            price: +item.price,
+            uniqueIdPrice: item.uniqueIdPrice,
+            companyId,
+            to: +item.start,
+            from: +item.end,
+            maxValue: hasMaxValue ? parseFloat(maxValue).toFixed(2) : null,
+          })
+          .then((res) => {
+            console.log(res.data);
+            isRequestOk = true;
+          })
+          .catch((err) => {
+            if (
+              err.response.data.message === 'Same day has already been added!'
+            ) {
+              showWarning('Já existe uma configuração para esse mesmo dia!');
+            }
+            isRequestOk = false;
+          });
+      }),
+    );
     return isRequestOk;
   };
 
@@ -259,6 +295,7 @@ export const PriceProvider = ({children}) => {
         setIsEdit,
         setPrice,
         updateFixedPrice,
+        updateDynamicPrice,
       }}>
       {children}
     </PriceContext.Provider>

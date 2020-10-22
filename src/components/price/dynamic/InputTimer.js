@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Input} from 'react-native-elements';
 
 export default function InputTimer(props) {
-  const [values, setValues] = useState({start: '', end: '', price: ''});
   return (
     <View style={styles.inputMainContainerDynamic}>
       <View style={styles.subMainContainer}>

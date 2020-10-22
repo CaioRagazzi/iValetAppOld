@@ -1,11 +1,15 @@
 import React, {useContext} from 'react';
 import {PriceContext} from '../../../contexts/price';
-import InputTimer from '../../inputTimer';
+import InputTimer from './InputTimer';
+import {showWarning} from '../../toast';
 
 export default function InputTimeDynamic() {
-  const {isDynamicEnabled, quantityDynamic, setQuantityDynamic} = useContext(
-    PriceContext,
-  );
+  const {
+    isDynamicEnabled,
+    quantityDynamic,
+    setQuantityDynamic,
+    deletePriceById,
+  } = useContext(PriceContext);
 
   const getInputValue = (item) => {
     const resultItem = quantityDynamic.find(
@@ -47,11 +51,18 @@ export default function InputTimeDynamic() {
     setQuantityDynamic(newArray);
   };
 
-  const removeSpecificItem = (itemId) => {
-    const newArray = quantityDynamic.filter((item) => {
-      return itemId !== item.id;
-    });
-    setQuantityDynamic(newArray);
+  const removeSpecificItem = async (itemId) => {
+    if (quantityDynamic.length <= 1) {
+      showWarning('É necessário ter pelo menos um campo');
+      return;
+    } else {
+      await deletePriceById(itemId).then(() => {
+        const newArray = quantityDynamic.filter((item) => {
+          return itemId !== item.id;
+        });
+        setQuantityDynamic(newArray);
+      });
+    }
   };
 
   return isDynamicEnabled

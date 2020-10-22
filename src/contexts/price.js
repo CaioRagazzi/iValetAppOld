@@ -239,6 +239,21 @@ export const PriceProvider = ({children}) => {
     return created;
   };
 
+  const deletePriceById = async (priceId) => {
+    let deleted = false;
+    axios
+      .delete('price', {params: {priceId}})
+      .then((res) => {
+        console.log(res.data);
+        deleted = true;
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        deleted = false;
+      });
+    return deleted;
+  };
+
   const cleanFields = () => {
     setSegunda(false);
     setTerca(false);
@@ -296,6 +311,7 @@ export const PriceProvider = ({children}) => {
         setPrice,
         updateFixedPrice,
         updateDynamicPrice,
+        deletePriceById,
       }}>
       {children}
     </PriceContext.Provider>

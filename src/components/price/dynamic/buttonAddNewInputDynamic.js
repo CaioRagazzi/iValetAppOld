@@ -13,7 +13,7 @@ export default function ButtonAddNewInputDynamic() {
       onPress={() =>
         setQuantityDynamic((previousState) => [
           ...previousState,
-          {id: format(new Date(), 'HHmmssSSS')},
+          {id: previousState[0].uniqueIdPrice},
         ])
       }>
       <Icon name="add-circle-outline" size={22} color="#41484F" />

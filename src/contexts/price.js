@@ -257,6 +257,21 @@ export const PriceProvider = ({children}) => {
     return deleted;
   };
 
+  const deletePriceByUniqueId = async (uniqueId) => {
+    let deleted = false;
+    await axios
+      .delete('price/uniqueId', {params: {uniqueId}})
+      .then((res) => {
+        console.log(res.data);
+        deleted = true;
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        deleted = false;
+      });
+    return deleted;
+  };
+
   const cleanFields = () => {
     setSegunda(false);
     setTerca(false);
@@ -317,6 +332,7 @@ export const PriceProvider = ({children}) => {
         deletePriceById,
         loadingPrice,
         setLoadingPrice,
+        deletePriceByUniqueId,
       }}>
       {children}
     </PriceContext.Provider>

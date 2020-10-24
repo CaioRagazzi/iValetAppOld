@@ -29,7 +29,6 @@ export default function InputTimer(props) {
       if (isEdit) {
         await deletePriceById(props.onRemove).then((res) => {
           removeIndexFromArray();
-          setLoadingDeleteButton(false);
         });
       } else {
         removeIndexFromArray();

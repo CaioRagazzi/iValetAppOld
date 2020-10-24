@@ -6,6 +6,7 @@ import {
   ScrollView,
   View,
   BackHandler,
+  ActivityIndicator,
 } from 'react-native';
 import {Divider} from 'react-native-elements';
 import DateButtonsCalendar from '../../../components/dateButtonsCalendar';
@@ -16,7 +17,7 @@ import {HeaderBackButton} from '@react-navigation/stack';
 import FixedContainer from '../../../components/price/fixed/fixedContainer';
 import DynamicContainer from '../../../components/price/dynamic/dynamicContainer';
 
-export default function AddPrice({navigation, route}) {
+export default function HandlePrice({navigation, route}) {
   const {
     fixedValue,
     cleanFields,
@@ -33,6 +34,7 @@ export default function AddPrice({navigation, route}) {
     isEdit,
     setIsEdit,
     updateDynamicPrice,
+    loadingPrice,
   } = useContext(PriceContext);
 
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
@@ -144,28 +146,42 @@ export default function AddPrice({navigation, route}) {
     updateDynamicPrice,
   ]);
 
-  return (
-    <SafeAreaView style={styles.mainContainer}>
-      <ScrollView
-        contentContainerStyle={styles.containerScroll}
-        scrollEnabled={true}
-        keyboardShouldPersistTaps="handled">
-        <DateButtonsCalendar
-          OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
+  const componentRender = () => {
+    if (loadingPrice) {
+      return (
+        <ActivityIndicator
+          style={styles.mainContainer}
+          size="large"
+          color="#0000ff"
         />
+      );
+    } else {
+      return (
+        <SafeAreaView style={styles.mainContainer}>
+          <ScrollView
+            contentContainerStyle={styles.containerScroll}
+            scrollEnabled={true}
+            keyboardShouldPersistTaps="handled">
+            <DateButtonsCalendar
+              OnWeekDayChange={(weekDays) => setSelectedWeekDays(weekDays)}
+            />
 
-        {isEdit && isFixedEnabled ? <FixedContainer /> : null}
-        {isEdit && isDynamicEnabled ? <DynamicContainer /> : null}
-        {!isEdit ? (
-          <View>
-            <FixedContainer />
-            <Divider style={styles.divider} />
-            <DynamicContainer />
-          </View>
-        ) : null}
-      </ScrollView>
-    </SafeAreaView>
-  );
+            {isEdit && isFixedEnabled ? <FixedContainer /> : null}
+            {isEdit && isDynamicEnabled ? <DynamicContainer /> : null}
+            {!isEdit ? (
+              <View>
+                <FixedContainer />
+                <Divider style={styles.divider} />
+                <DynamicContainer />
+              </View>
+            ) : null}
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+  };
+
+  return componentRender();
 }
 
 const styles = StyleSheet.create({

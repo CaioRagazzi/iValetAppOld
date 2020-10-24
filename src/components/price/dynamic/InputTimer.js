@@ -1,9 +1,63 @@
-import React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Input} from 'react-native-elements';
+import {PriceContext} from '../../../contexts/price';
+import {showWarning} from '../../toast';
 
 export default function InputTimer(props) {
+  const {
+    quantityDynamic,
+    setQuantityDynamic,
+    deletePriceById,
+    isEdit,
+  } = useContext(PriceContext);
+  const [loadingDeleteButton, setLoadingDeleteButton] = useState(false);
+
+  const onRemove = async () => {
+    setLoadingDeleteButton(true);
+    if (quantityDynamic.length <= 1) {
+      showWarning('É necessário ter pelo menos um campo');
+      setLoadingDeleteButton(false);
+      return;
+    } else {
+      if (isEdit) {
+        await deletePriceById(props.onRemove).then((res) => {
+          removeIndexFromArray();
+          setLoadingDeleteButton(false);
+        });
+      } else {
+        removeIndexFromArray();
+      }
+    }
+  };
+
+  const removeIndexFromArray = () => {
+    const newArray = quantityDynamic.filter((item) => {
+      return props.onRemove !== item.id;
+    });
+    setQuantityDynamic(newArray);
+  };
+
+  const deleteButton = () => {
+    if (loadingDeleteButton) {
+      return <ActivityIndicator size="small" color="#0000ff" />;
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={() => onRemove()}
+          style={styles.removeButton}>
+          <Icon name="remove-circle-outline" size={22} color="#9E8170" />
+        </TouchableOpacity>
+      );
+    }
+  };
+
   return (
     <View style={styles.inputMainContainerDynamic}>
       <View style={styles.subMainContainer}>
@@ -40,11 +94,7 @@ export default function InputTimer(props) {
           onChangeText={(text) => props.onPriceChangeText(text)}
         />
       </View>
-      <TouchableOpacity
-        onPress={() => props.removeItem()}
-        style={styles.removeButton}>
-        <Icon name="remove-circle-outline" size={22} color="#9E8170" />
-      </TouchableOpacity>
+      {deleteButton()}
     </View>
   );
 }

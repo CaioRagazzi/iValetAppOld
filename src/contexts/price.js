@@ -7,6 +7,7 @@ import {showWarning} from '../components/toast';
 export const PriceContext = createContext();
 
 export const PriceProvider = ({children}) => {
+  const [loadingPrice, setLoadingPrice] = useState(false);
   const {companyId} = useContext(AuthContext);
   const [segunda, setSegunda] = useState(false);
   const [terca, setTerca] = useState(false);
@@ -61,6 +62,7 @@ export const PriceProvider = ({children}) => {
   };
 
   const populateFields = async (priceParam) => {
+    setLoadingPrice(true);
     const priceReturn = await getPriceByUniqueId(priceParam.uniqueIdPrice);
     if (priceReturn[0].type === 1) {
       setWeekDaysButtons(priceReturn[0].weekDay);
@@ -80,6 +82,7 @@ export const PriceProvider = ({children}) => {
         setMaxValue(priceReturn[0].maxPriceValue);
       }
     }
+    setLoadingPrice(false);
   };
 
   const populateDynamicFields = (priceParam) => {
@@ -88,9 +91,9 @@ export const PriceProvider = ({children}) => {
         ...previousState,
         {
           id: priceItem.id,
-          start: priceItem.to.toString(),
-          end: priceItem.from.toString(),
-          price: priceItem.price.toString(),
+          start: priceItem.to?.toString(),
+          end: priceItem.from?.toString(),
+          price: priceItem.price?.toString(),
           maxPriceValue: priceItem.maxPriceValue,
           type: priceItem.type,
           uniqueIdPrice: priceItem.uniqueIdPrice,
@@ -241,7 +244,7 @@ export const PriceProvider = ({children}) => {
 
   const deletePriceById = async (priceId) => {
     let deleted = false;
-    axios
+    await axios
       .delete('price', {params: {priceId}})
       .then((res) => {
         console.log(res.data);
@@ -312,6 +315,8 @@ export const PriceProvider = ({children}) => {
         updateFixedPrice,
         updateDynamicPrice,
         deletePriceById,
+        loadingPrice,
+        setLoadingPrice,
       }}>
       {children}
     </PriceContext.Provider>

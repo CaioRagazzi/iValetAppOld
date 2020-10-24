@@ -17,7 +17,7 @@ export default function Prices({navigation}) {
     navigation.setOptions({
       title: 'Preços',
       headerRight: () => (
-        <HeaderPlusIcon onPress={() => navigation.navigate('AddPrice')} />
+        <HeaderPlusIcon onPress={() => navigation.navigate('HandlePrice')} />
       ),
     });
 
@@ -34,6 +34,7 @@ export default function Prices({navigation}) {
 
   const getPrices = useCallback(async () => {
     setLoading(true);
+    setPrices();
     await axios
       .get(`price/${companyId}`)
       .then((res) => {
@@ -50,7 +51,7 @@ export default function Prices({navigation}) {
     setPrice(price);
     setTypePrice(price.type);
     populateFields(price);
-    navigation.navigate('AddPrice', {edit: true});
+    navigation.navigate('HandlePrice', {edit: true});
   };
 
   const renderItem = ({item}) => (

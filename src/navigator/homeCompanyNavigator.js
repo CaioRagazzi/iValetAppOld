@@ -11,7 +11,7 @@ import EntryScreen from '../screens/companyScreens/entry';
 import CarDetailsScreen from '../screens/companyScreens/carDetails';
 import FinishedScreen from '../screens/companyScreens/finished';
 import PricesScreen from '../screens/companyScreens/price/prices';
-import AddPriceScreen from '../screens/companyScreens/price/addPrice';
+import HandlePriceScreen from '../screens/companyScreens/price/handlePrice';
 import {GatewayProvider} from '../contexts/gateway';
 import {PriceProvider} from '../contexts/price';
 
@@ -115,7 +115,7 @@ function PricesStackNavigator() {
           headerTitleStyle: {color: '#41484F'},
         }}>
         <Stack.Screen name="Prices" component={PricesScreen} />
-        <Stack.Screen name="AddPrice" component={AddPriceScreen} />
+        <Stack.Screen name="HandlePrice" component={HandlePriceScreen} />
       </Stack.Navigator>
     </PriceProvider>
   );

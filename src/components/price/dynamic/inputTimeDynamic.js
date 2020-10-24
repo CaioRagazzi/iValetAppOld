@@ -9,6 +9,7 @@ export default function InputTimeDynamic() {
     quantityDynamic,
     setQuantityDynamic,
     deletePriceById,
+    isEdit,
   } = useContext(PriceContext);
 
   const getInputValue = (item) => {
@@ -51,31 +52,17 @@ export default function InputTimeDynamic() {
     setQuantityDynamic(newArray);
   };
 
-  const removeSpecificItem = async (itemId) => {
-    if (quantityDynamic.length <= 1) {
-      showWarning('É necessário ter pelo menos um campo');
-      return;
-    } else {
-      await deletePriceById(itemId).then(() => {
-        const newArray = quantityDynamic.filter((item) => {
-          return itemId !== item.id;
-        });
-        setQuantityDynamic(newArray);
-      });
-    }
-  };
-
   return isDynamicEnabled
     ? quantityDynamic.map((item) => (
         <InputTimer
-          startValue={getInputValue(item).start}
+          startValue={getInputValue(item)?.start}
           onStartChangeText={(value) => setStartInputValue(item, value)}
-          endValue={getInputValue(item).end}
+          endValue={getInputValue(item)?.end}
           onEndChangeText={(value) => setEndInputValue(item, value)}
-          priceValue={getInputValue(item).price}
+          priceValue={getInputValue(item)?.price}
           onPriceChangeText={(value) => setPriceInputValue(item, value)}
           key={item.id}
-          removeItem={() => removeSpecificItem(item.id)}
+          onRemove={item.id}
         />
       ))
     : null;

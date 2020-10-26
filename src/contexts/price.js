@@ -2,7 +2,7 @@ import React, {createContext, useState, useContext} from 'react';
 import axios from '../services/axios';
 import {format} from 'date-fns';
 import {AuthContext} from '../contexts/auth';
-import {showWarning} from '../components/toast';
+import {showWarning, showError} from '../components/toast';
 
 export const PriceContext = createContext();
 
@@ -28,9 +28,14 @@ export const PriceProvider = ({children}) => {
 
   const getPriceByUniqueId = async (uniqueId) => {
     let priceReturn = [];
-    await axios.get(`price/uniqueid/${uniqueId}`).then((res) => {
-      priceReturn = res.data;
-    });
+    await axios
+      .get(`price/uniqueid/${uniqueId}`)
+      .then((res) => {
+        priceReturn = res.data;
+      })
+      .catch(() => {
+        showError('Erro ao carregar os preços');
+      });
 
     return priceReturn;
   };
@@ -63,7 +68,15 @@ export const PriceProvider = ({children}) => {
 
   const populateFields = async (priceParam) => {
     setLoadingPrice(true);
-    const priceReturn = await getPriceByUniqueId(priceParam.uniqueIdPrice);
+    let priceReturnUnsorted;
+    try {
+      priceReturnUnsorted = await getPriceByUniqueId(priceParam.uniqueIdPrice);
+    } catch (error) {
+      showError('Erro ao carregar o preço!');
+    }
+
+    let priceReturn = priceReturnUnsorted.sort((a, b) => a.to > b.to);
+
     if (priceReturn[0].type === 1) {
       setWeekDaysButtons(priceReturn[0].weekDay);
       setfixedValue(priceReturn[0].price);
@@ -136,6 +149,7 @@ export const PriceProvider = ({children}) => {
   const createFixedPrice = async (weekDays) => {
     let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
     let created = false;
+    setLoadingPrice(true);
     await axios
       .post('price', {
         type: 1,
@@ -151,7 +165,9 @@ export const PriceProvider = ({children}) => {
         if (err.response.data.message === 'Same day has already been added!') {
           showWarning('Já existe uma configuração para esse mesmo dia!');
         }
+        showError('Erro ao criar o preço!');
         created = false;
+        setLoadingPrice(false);
       });
 
     return created;
@@ -159,6 +175,7 @@ export const PriceProvider = ({children}) => {
 
   const updateFixedPrice = async (weekDay) => {
     let isRequestOk = false;
+    setLoadingPrice(true);
     await axios
       .put(`price/${price.id}`, {
         weekDay,
@@ -173,13 +190,16 @@ export const PriceProvider = ({children}) => {
         if (err.response.data.message === 'Same day has already been added!') {
           showWarning('Já existe uma configuração para esse mesmo dia!');
         }
+        showError('Erro ao atualizar o preço!');
         isRequestOk = false;
+        setLoadingPrice(false);
       });
     return isRequestOk;
   };
 
   const updateDynamicPrice = async (weekDay) => {
     let isRequestOk = false;
+    setLoadingPrice(true);
     await Promise.all(
       quantityDynamic.map(async (item) => {
         await axios
@@ -192,8 +212,7 @@ export const PriceProvider = ({children}) => {
             from: +item.end,
             maxValue: hasMaxValue ? parseFloat(maxValue).toFixed(2) : null,
           })
-          .then((res) => {
-            console.log(res.data);
+          .then(() => {
             isRequestOk = true;
           })
           .catch((err) => {
@@ -202,7 +221,9 @@ export const PriceProvider = ({children}) => {
             ) {
               showWarning('Já existe uma configuração para esse mesmo dia!');
             }
+            showError('Erro ao atualizar o preço!');
             isRequestOk = false;
+            setLoadingPrice(false);
           });
       }),
     );
@@ -212,6 +233,7 @@ export const PriceProvider = ({children}) => {
   const createDynamicPrice = async (weekDays) => {
     let uniqueIdPrice = format(new Date(), 'HHmmssSSS');
     let created = false;
+    setLoadingPrice(true);
     await Promise.all(
       quantityDynamic.map(async (item) => {
         await axios
@@ -234,7 +256,9 @@ export const PriceProvider = ({children}) => {
             ) {
               showWarning('Já existe uma configuração para esse mesmo dia!');
             }
+            showError('Erro ao criar o preço!');
             created = false;
+            setLoadingPrice(false);
           });
       }),
     );
@@ -246,12 +270,11 @@ export const PriceProvider = ({children}) => {
     let deleted = false;
     await axios
       .delete('price', {params: {priceId}})
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         deleted = true;
       })
-      .catch((err) => {
-        console.log(err.response.data);
+      .catch(() => {
+        showError('Erro ao deletar o preço!');
         deleted = false;
       });
     return deleted;
@@ -261,12 +284,11 @@ export const PriceProvider = ({children}) => {
     let deleted = false;
     await axios
       .delete('price/uniqueId', {params: {uniqueId}})
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         deleted = true;
       })
-      .catch((err) => {
-        console.log(err.response.data);
+      .catch(() => {
+        showError('Erro ao deletar o preço!');
         deleted = false;
       });
     return deleted;

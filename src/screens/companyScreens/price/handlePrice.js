@@ -35,6 +35,7 @@ export default function HandlePrice({navigation, route}) {
     setIsEdit,
     updateDynamicPrice,
     loadingPrice,
+    setLoadingPrice,
   } = useContext(PriceContext);
 
   const [selectedWeekDays, setSelectedWeekDays] = useState('');
@@ -59,10 +60,12 @@ export default function HandlePrice({navigation, route}) {
         if (!isEdit) {
           await createFixedPrice(selectedWeekDays).then((res) => {
             created = res;
+            setLoadingPrice(false);
           });
         } else {
           await updateFixedPrice(selectedWeekDays).then((res) => {
             created = res;
+            setLoadingPrice(false);
           });
         }
         if (!created) {
@@ -93,10 +96,12 @@ export default function HandlePrice({navigation, route}) {
             maxValue,
           ).then((res) => {
             created = res;
+            setLoadingPrice(false);
           });
         } else {
           await updateDynamicPrice(selectedWeekDays).then((res) => {
             created = res;
+            setLoadingPrice(false);
           });
         }
         if (!created) {
@@ -107,8 +112,9 @@ export default function HandlePrice({navigation, route}) {
       }
     };
     BackHandler.addEventListener('hardwareBackPress', () => {
+      navigation.goBack();
       cleanFields();
-      return false;
+      return true;
     });
     navigation.setOptions({
       title: 'Home',
@@ -144,6 +150,7 @@ export default function HandlePrice({navigation, route}) {
     updateFixedPrice,
     setIsEdit,
     updateDynamicPrice,
+    setLoadingPrice,
   ]);
 
   const componentRender = () => {

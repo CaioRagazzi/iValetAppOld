@@ -138,25 +138,25 @@ export default function Prices({navigation}) {
     let returnString = '';
     splited.map((item) => {
       switch (item) {
-        case 'M':
+        case 'MONDAY':
           returnString += 'Segunda | ';
           break;
-        case 'TU':
+        case 'TUESDAY':
           returnString += 'Terça | ';
           break;
-        case 'W':
+        case 'WEDNESDAY':
           returnString += 'Quarta | ';
           break;
-        case 'TH':
+        case 'THURSDAY':
           returnString += 'Quinta | ';
           break;
-        case 'F':
+        case 'FRIDAY':
           returnString += 'Sexta | ';
           break;
-        case 'SA':
+        case 'SATURDAY':
           returnString += 'Sábado | ';
           break;
-        case 'SU':
+        case 'SUNDAY':
           returnString += 'Domingo | ';
           break;
       }

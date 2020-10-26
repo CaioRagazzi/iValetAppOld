@@ -121,25 +121,25 @@ export const PriceProvider = ({children}) => {
 
     splited.map((item) => {
       switch (item) {
-        case 'M':
+        case 'MONDAY':
           setSegunda(true);
           break;
-        case 'TU':
+        case 'TUESDAY':
           setTerca(true);
           break;
-        case 'W':
+        case 'WEDNESDAY':
           setQuarta(true);
           break;
-        case 'TH':
+        case 'THURSDAY':
           setQuinta(true);
           break;
-        case 'F':
+        case 'FRIDAY':
           setSexta(true);
           break;
-        case 'SA':
+        case 'SATURDAY':
           setSabado(true);
           break;
-        case 'SU':
+        case 'SUNDAY':
           setDomingo(true);
           break;
       }

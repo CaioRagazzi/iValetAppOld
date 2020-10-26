@@ -23,11 +23,11 @@ export default function DateButtonsCalendar(props) {
 
   useEffect(() => {
     const selectedWeekDays = () => {
-      let string = `${segunda ? 'M|' : ''}${terca ? 'TU|' : ''}${
-        quarta ? 'W|' : ''
-      }${quinta ? 'TH|' : ''}${sexta ? 'F|' : ''}${sabado ? 'SA|' : ''}${
-        domingo ? 'SU|' : ''
-      }`;
+      let string = `${segunda ? 'MONDAY|' : ''}${terca ? 'TUESDAY|' : ''}${
+        quarta ? 'WEDNESDAY|' : ''
+      }${quinta ? 'THURSDAY|' : ''}${sexta ? 'FRIDAY|' : ''}${
+        sabado ? 'SATURDAY|' : ''
+      }${domingo ? 'SUNDAY|' : ''}`;
 
       const formatedString = deletePipeIfLast(string);
       props.OnWeekDayChange(formatedString);

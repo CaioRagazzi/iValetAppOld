@@ -2,8 +2,9 @@ import React, {useEffect, useContext, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import axios from '../../services/axios';
 import FloatingActionButton from '../../components/floatingActionButton';
-import {format} from 'date-fns';
+import {format, subHours, differenceInMinutes, parseISO} from 'date-fns';
 import {AuthContext} from '../../contexts/auth';
+import {showWarning} from '../../components/toast';
 
 export default function CarDetails({route, navigation}) {
   const {transactionParam} = route.params;
@@ -21,16 +22,33 @@ export default function CarDetails({route, navigation}) {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.length === 0) {
+          showWarning(
+            'Nenhuma tabela de preço configurada para o dia de hoje!',
+          );
+          return;
+        }
         if (res.data[0].type === 1) {
           setPrice(res.data[0].price);
         }
+        if (res.data[0].type === 2) {
+          const startDate = parseISO(transactionParam.startDate);
+          console.log('START DATE', transactionParam.startDate);
+          const currentDate = subHours(new Date(), 3);
+          console.log('CURRENT DATE', currentDate);
+          const difference = differenceInMinutes(currentDate, startDate);
+          console.log('DIFFERENCE', difference);
+          res.data.map((priceMap) => {
+            if (difference >= priceMap.to && difference <= priceMap.from) {
+              setPrice(priceMap.price);
+            }
+          });
+        }
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err.response);
       });
-    console.log(format(new Date(), 'iiii'));
-  }, [navigation, transactionParam.placa, companyId]);
+  }, [navigation, transactionParam.placa, companyId, transactionParam]);
 
   const handleBaixaVeiculo = () => {
     axios

@@ -1,10 +1,9 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Card} from 'react-native-elements';
-import {format, parseISO, formatDistance, subHours} from 'date-fns';
+import {format, parseISO, formatDistance} from 'date-fns';
 
 export default function CardCar({onPress, data}) {
-  console.log(parseISO(data.startDate).getUTCHours());
   return (
     <TouchableOpacity onPress={() => (onPress ? onPress() : null)}>
       <Card>
@@ -12,11 +11,10 @@ export default function CardCar({onPress, data}) {
         <Card.Divider />
         <View>
           <Text>
-            Entrada: {format(parseISO(data.startDate, 'dd/MM/yyyy HH:mm:ss'))}
+            Entrada: {format(parseISO(data.startDate), 'dd/MM/yyyy HH:mm:ss')}
           </Text>
           <Text>
-            Tempo Total:{' '}
-            {formatDistance(parseISO(data.startDate), subHours(new Date(), 3))}
+            Tempo Total: {formatDistance(parseISO(data.startDate), new Date())}
           </Text>
           {data.prisma > 0 ? <Text>Prisma: {data.prisma}</Text> : null}
         </View>

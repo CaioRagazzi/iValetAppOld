@@ -32,21 +32,37 @@ export default function CarDetails({route, navigation}) {
           setPrice(res.data[0].price);
         }
         if (res.data[0].type === 2) {
-          const startDate = parseISO(transactionParam.startDate);
-          console.log('START DATE', transactionParam.startDate);
-          const currentDate = subHours(new Date(), 3);
-          console.log('CURRENT DATE', currentDate);
+          const startDate = subHours(
+            parseISO(transactionParam.startDate),
+            new Date().getTimezoneOffset() / 60,
+          );
+          const currentDate = subHours(
+            new Date(),
+            new Date().getTimezoneOffset() / 60,
+          );
           const difference = differenceInMinutes(currentDate, startDate);
-          console.log('DIFFERENCE', difference);
-          res.data.map((priceMap) => {
+
+          let foundValue = false;
+          let sortedReturn = res.data.sort((a, b) => a.to > b.to);
+
+          sortedReturn.map((priceMap) => {
             if (difference >= priceMap.to && difference <= priceMap.from) {
               setPrice(priceMap.price);
+              foundValue = true;
             }
           });
+
+          if (!foundValue && res.data[0].maxPriceValue === 0) {
+            let maxPrice = sortedReturn[sortedReturn.length - 1].price;
+            setPrice(maxPrice);
+          } else {
+            setPrice(res.data[0].maxPriceValue);
+          }
         }
       })
       .catch((err) => {
         console.log(err.response);
+        console.log(err);
       });
   }, [navigation, transactionParam.placa, companyId, transactionParam]);
 
@@ -68,7 +84,10 @@ export default function CarDetails({route, navigation}) {
   return (
     <View style={styles.mainContainer}>
       <Text>Placa: {transactionParam.placa.toUpperCase()}</Text>
-      <Text>Start Date: {transactionParam.startDate}</Text>
+      <Text>
+        Start Date:{' '}
+        {format(parseISO(transactionParam.startDate), 'dd/MM/yyyy HH:mm:ss')}
+      </Text>
       {transactionParam.prisma > 0 ? (
         <Text>Placa: {transactionParam.prisma}</Text>
       ) : null}

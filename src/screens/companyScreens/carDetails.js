@@ -1,5 +1,12 @@
 import React, {useEffect, useContext, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native';
+import {Divider, Card} from 'react-native-elements';
 import axios from '../../services/axios';
 import FloatingActionButton from '../../components/floatingActionButton';
 import {format, subHours, differenceInMinutes, parseISO} from 'date-fns';
@@ -10,10 +17,11 @@ export default function CarDetails({route, navigation}) {
   const {transactionParam} = route.params;
   const {companyId} = useContext(AuthContext);
   const [price, setPrice] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({title: transactionParam.placa.toUpperCase()});
-
+    navigation.setOptions({title: 'Detalhes'});
+    setLoading(true);
     axios
       .get('price/week/day', {
         params: {
@@ -26,6 +34,7 @@ export default function CarDetails({route, navigation}) {
           showWarning(
             'Nenhuma tabela de preço configurada para o dia de hoje!',
           );
+          setLoading(false);
           return;
         }
         if (res.data[0].type === 1) {
@@ -44,7 +53,6 @@ export default function CarDetails({route, navigation}) {
 
           let foundValue = false;
           let sortedReturn = res.data.sort((a, b) => a.to > b.to);
-
           sortedReturn.map((priceMap) => {
             if (difference >= priceMap.to && difference <= priceMap.from) {
               setPrice(priceMap.price);
@@ -55,10 +63,11 @@ export default function CarDetails({route, navigation}) {
           if (!foundValue && res.data[0].maxPriceValue === 0) {
             let maxPrice = sortedReturn[sortedReturn.length - 1].price;
             setPrice(maxPrice);
-          } else {
+          } else if (!foundValue && res.data[0].maxPriceValue !== 0) {
             setPrice(res.data[0].maxPriceValue);
           }
         }
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err.response);
@@ -82,23 +91,72 @@ export default function CarDetails({route, navigation}) {
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Text>Placa: {transactionParam.placa.toUpperCase()}</Text>
-      <Text>
-        Start Date:{' '}
-        {format(parseISO(transactionParam.startDate), 'dd/MM/yyyy HH:mm:ss')}
-      </Text>
-      {transactionParam.prisma > 0 ? (
-        <Text>Placa: {transactionParam.prisma}</Text>
-      ) : null}
-      <Text>Preço: {price}</Text>
+    <SafeAreaView style={styles.mainContainer}>
+      <View style={styles.carPlate}>
+        <Text style={styles.textPlate}>
+          {transactionParam.placa.toUpperCase()}
+        </Text>
+      </View>
+      <Card>
+        <Text style={styles.titleTexts}>Data de entrada: </Text>
+        <Text style={styles.texts}>
+          {format(parseISO(transactionParam.startDate), 'dd/MM/yyyy HH:mm:ss')}
+        </Text>
+      </Card>
+
+      <View style={{flexDirection: 'row'}}>
+        {transactionParam.prisma > 0 ? (
+          <Card containerStyle={{ width: '40%' }}>
+            <Text style={styles.titleTexts}>Prisma:</Text>
+            <Text style={styles.texts}>{transactionParam.prisma}</Text>
+          </Card>
+        ) : null}
+
+        <Card containerStyle={{ width: '43%' }}>
+          <Text style={styles.titleTexts}>Preço:</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#0000ff" />
+          ) : (
+            <Text style={styles.texts}>{price}</Text>
+          )}
+        </Card>
+      </View>
       <FloatingActionButton text="Saída" onPress={() => handleBaixaVeiculo()} />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    margin: 8,
+  },
+  carPlate: {
+    borderWidth: 2,
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: '40%',
+    height: 40,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  textPlate: {
+    fontSize: 26,
+    fontWeight: 'bold',
+  },
+  texts: {
+    fontSize: 18,
+  },
+  titleTexts: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  informationContainer: {
+    marginBottom: 10,
+  },
+  divider: {
+    backgroundColor: 'black',
+    margin: 2,
   },
 });

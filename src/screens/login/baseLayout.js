@@ -31,11 +31,14 @@ const styles = StyleSheet.create({
   cardTitle: {
     textAlignVertical: 'center',
     color: 'white',
-    backgroundColor: '#832D25',
+    backgroundColor: '#4a148c',
     fontSize: 26,
     height: 50,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
   cardContainer: {
     padding: 0,
+    borderRadius: 10,
   },
 });

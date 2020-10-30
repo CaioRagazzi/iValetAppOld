@@ -120,6 +120,10 @@ function LoginScreen(props) {
     setCompanyId(value.id);
   };
 
+  const closeOverlay = () => {
+    setOverlayVisible(false);
+  };
+
   return (
     <BaseLayout title="iValet">
       <InputEmail
@@ -154,7 +158,7 @@ function LoginScreen(props) {
       <OverlayCompanies
         visible={overlayVisible}
         onPress={handleSelectedCompany}
-        onClose={() => setOverlayVisible(false)}
+        onClose={() => closeOverlay()}
       />
     </BaseLayout>
   );

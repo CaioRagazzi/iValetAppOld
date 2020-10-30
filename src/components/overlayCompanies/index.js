@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   title: {
     height: '30%',
-    backgroundColor: '#832D25',
+    backgroundColor: '#38006b',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     justifyContent: 'center',
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatarContainer: {
-    backgroundColor: '#41484F',
+    backgroundColor: '#6a1b9a',
   },
   listItem: {
     fontSize: 18,

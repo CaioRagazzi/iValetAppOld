@@ -7,7 +7,7 @@ export default function FloatingActionButton(props) {
     if (props.icon) {
       return props.icon;
     } else {
-      return <Icon name="car-sport-outline" size={24} color="#000" />;
+      return <Icon name="car-sport-outline" size={24} color="#ffffff" />;
     }
   };
 
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: '#BB86FC',
+    backgroundColor: '#4a148c',
     borderRadius: 100,
     elevation: 5,
   },
   text: {
-    color: '#000',
+    color: '#ffffff',
     fontSize: 12,
     fontWeight: 'bold',
   },

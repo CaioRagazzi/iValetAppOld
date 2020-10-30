@@ -34,28 +34,58 @@ function HomeTabNavigator() {
     <GatewayProvider>
       <Tab.Navigator
         tabBarOptions={{
-          activeTintColor: '#41484F',
+          activeTintColor: '#ffffff',
+          inactiveTintColor: '#ffffff',
+          activeBackgroundColor: '#7c43bd',
+          inactiveBackgroundColor: '#7c43bd',
           keyboardHidesTabBar: true,
         }}>
         <Tab.Screen
           name="Home"
           component={HomeStackNavigator}
           options={{
-            tabBarIcon: () => <IconIonicon name="home-outline" size={24} />,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <IconIonicon name="home" size={24} color="#ffffff" />
+              ) : (
+                <IconIonicon name="home-outline" size={24} color="#ffffff" />
+              ),
           }}
         />
         <Tab.Screen
           name="Entrada"
           component={EntryStackNavigator}
           options={{
-            tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <IconIonicon name="arrow-up-circle" size={30} color="#ffffff" />
+              ) : (
+                <IconIonicon
+                  name="arrow-up-circle-outline"
+                  size={30}
+                  color="#ffffff"
+                />
+              ),
           }}
         />
         <Tab.Screen
           name="Saida"
           component={FinishedStackNavigator}
           options={{
-            tabBarIcon: () => <IconIonicon name="car-outline" size={24} />,
+            tabBarIcon: ({focused}) =>
+              focused ? (
+                <IconIonicon
+                  name="arrow-down-circle"
+                  size={30}
+                  color="#ffffff"
+                />
+              ) : (
+                <IconIonicon
+                  name="arrow-down-circle-outline"
+                  size={30}
+                  color="#ffffff"
+                />
+              ),
           }}
         />
       </Tab.Navigator>
@@ -67,8 +97,8 @@ function HomeStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#6200EE'},
-        headerTitleStyle: {color: '#FCFCFC'},
+        headerStyle: {backgroundColor: '#4a148c'},
+        headerTitleStyle: {color: '#ffffff'},
       }}>
       <Stack.Screen name="Home" component={HomeCompanyScreen} />
       <Stack.Screen
@@ -84,8 +114,9 @@ function EntryStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#6200EE'},
-        headerTitleStyle: {color: '#FCFCFC'},
+        headerStyle: {backgroundColor: '#4a148c'},
+        headerTitleStyle: {color: '#ffffff'},
+        headerTintColor: 'white',
       }}>
       <Stack.Screen name="Entrada" component={EntryScreen} />
       <Stack.Screen name="Details" component={CarDetailsScreen} />
@@ -97,8 +128,8 @@ function FinishedStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#6200EE'},
-        headerTitleStyle: {color: '#FCFCFC'},
+        headerStyle: {backgroundColor: '#4a148c'},
+        headerTitleStyle: {color: '#ffffff'},
       }}>
       <Stack.Screen name="Saida" component={FinishedScreen} />
     </Stack.Navigator>
@@ -110,8 +141,8 @@ function PricesStackNavigator() {
     <PriceProvider>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: {backgroundColor: '#6200EE'},
-          headerTitleStyle: {color: '#FCFCFC'},
+          headerStyle: {backgroundColor: '#4a148c'},
+          headerTitleStyle: {color: '#ffffff'},
         }}>
         <Stack.Screen name="Prices" component={PricesScreen} />
         <Stack.Screen name="HandlePrice" component={HandlePriceScreen} />

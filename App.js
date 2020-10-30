@@ -11,7 +11,7 @@ const App = () => {
       raised: true,
       titleStyle: {},
       buttonStyle: {
-        backgroundColor: '#BB86FC',
+        backgroundColor: '#4a148c',
       },
     },
     Icon: {
@@ -22,7 +22,7 @@ const App = () => {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <StatusBar backgroundColor="#6200EE" />
+        <StatusBar backgroundColor="#38006b" />
         <Navigator />
       </ThemeProvider>
     </AuthProvider>

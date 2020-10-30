@@ -3,6 +3,7 @@ import {View, FlatList} from 'react-native';
 import {GatewayContext} from '../../contexts/gateway';
 import CardCar from '../../components/cardCar';
 import OpenDrawerIcon from '../../components/openDrawerIcon';
+import {stylesDefault} from '../../styles/defaultStyles';
 
 export default function Entry({navigation}) {
   const {openedTransactions, getOpenedCars, loading} = useContext(
@@ -19,7 +20,7 @@ export default function Entry({navigation}) {
   }, [navigation]);
 
   return (
-    <View>
+    <View style={stylesDefault.mainContainer}>
       <FlatList
         refreshing={loading}
         onRefresh={getOpenedCars}

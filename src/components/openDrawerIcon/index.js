@@ -10,6 +10,7 @@ export default function OpenDrawerIcon(props) {
         name="menu-outline"
         size={28}
         onPress={() => props.onPress()}
+        color="#FCFCFC"
       />
     </SafeAreaView>
   );

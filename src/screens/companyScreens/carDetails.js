@@ -92,35 +92,33 @@ export default function CarDetails({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.carPlate}>
-        <Text style={styles.textPlate}>
-          {transactionParam.placa.toUpperCase()}
-        </Text>
-      </View>
-      <Card>
-        <Text style={styles.titleTexts}>Data de entrada: </Text>
+      <Card containerStyle={styles.cardContainer}>
+        <Card.Title style={styles.titleTexts}>Placa</Card.Title>
+        <Text style={styles.texts}>{transactionParam.placa.toUpperCase()}</Text>
+      </Card>
+
+      {transactionParam.prisma > 0 ? (
+        <Card containerStyle={styles.cardContainer}>
+          <Card.Title style={styles.titleTexts}>Prisma</Card.Title>
+          <Text style={styles.texts}>{transactionParam.prisma}</Text>
+        </Card>
+      ) : null}
+
+      <Card containerStyle={styles.cardContainer}>
+        <Card.Title style={styles.titleTexts}>Preço</Card.Title>
+        {loading ? (
+          <ActivityIndicator size="small" color="#0000ff" />
+        ) : (
+          <Text style={styles.texts}>{price}</Text>
+        )}
+      </Card>
+
+      <Card containerStyle={styles.cardContainer}>
+        <Card.Title style={styles.titleTexts}>Data de entrada</Card.Title>
         <Text style={styles.texts}>
           {format(parseISO(transactionParam.startDate), 'dd/MM/yyyy HH:mm:ss')}
         </Text>
       </Card>
-
-      <View style={{flexDirection: 'row'}}>
-        {transactionParam.prisma > 0 ? (
-          <Card containerStyle={{ width: '40%' }}>
-            <Text style={styles.titleTexts}>Prisma:</Text>
-            <Text style={styles.texts}>{transactionParam.prisma}</Text>
-          </Card>
-        ) : null}
-
-        <Card containerStyle={{ width: '43%' }}>
-          <Text style={styles.titleTexts}>Preço:</Text>
-          {loading ? (
-            <ActivityIndicator size="small" color="#0000ff" />
-          ) : (
-            <Text style={styles.texts}>{price}</Text>
-          )}
-        </Card>
-      </View>
       <FloatingActionButton text="Saída" onPress={() => handleBaixaVeiculo()} />
     </SafeAreaView>
   );
@@ -129,28 +127,17 @@ export default function CarDetails({route, navigation}) {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    margin: 8,
-  },
-  carPlate: {
-    borderWidth: 2,
-    alignItems: 'center',
-    alignSelf: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    width: '40%',
-    height: 40,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  textPlate: {
-    fontSize: 26,
-    fontWeight: 'bold',
   },
   texts: {
-    fontSize: 18,
+    fontSize: 26,
+    fontWeight: '700',
   },
   titleTexts: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 15,
+    alignSelf: 'flex-start',
   },
   informationContainer: {
     marginBottom: 10,
@@ -158,5 +145,9 @@ const styles = StyleSheet.create({
   divider: {
     backgroundColor: 'black',
     margin: 2,
+  },
+  cardContainer: {
+    borderRadius: 10,
+    margin: 6,
   },
 });

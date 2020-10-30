@@ -6,6 +6,7 @@ import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
 import {showWarning} from '../../components/toast';
 import OpenDrawerIcon from '../../components/openDrawerIcon';
+import {stylesDefault} from '../../styles/defaultStyles';
 
 export default function HomeScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
@@ -67,9 +68,9 @@ export default function HomeScreen({navigation}) {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, stylesDefault.mainContainer]}>
       <TextH h2> Caixa {isCaixaOpened ? 'Aberto' : 'Fechado'} </TextH>
-      <View style={styles.resumeContainer}>
+      {/* <View style={styles.resumeContainer}>
         <View style={styles.containerRow}>
           <Text>Total 1</Text>
           <Text>12</Text>
@@ -90,7 +91,7 @@ export default function HomeScreen({navigation}) {
           <Text>Total 5</Text>
           <Text>50</Text>
         </View>
-      </View>
+      </View> */}
       <Button
         title={isCaixaOpened ? 'Fechar Caixa' : 'Abrir Caixa'}
         onPress={() => openCloseCaixa()}
@@ -103,7 +104,6 @@ export default function HomeScreen({navigation}) {
 const styles = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
-    flex: 1,
   },
   containerRow: {
     flexDirection: 'row',

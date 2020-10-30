@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {StatusBar} from 'react-native';
 import Navigator from './src/navigator/index';
 import AuthProvider from './src/contexts/auth';
 import {ThemeProvider} from 'react-native-elements';
@@ -10,7 +11,7 @@ const App = () => {
       raised: true,
       titleStyle: {},
       buttonStyle: {
-        backgroundColor: '#9E8170',
+        backgroundColor: '#BB86FC',
       },
     },
     Icon: {
@@ -21,6 +22,7 @@ const App = () => {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
+        <StatusBar backgroundColor="#6200EE" />
         <Navigator />
       </ThemeProvider>
     </AuthProvider>

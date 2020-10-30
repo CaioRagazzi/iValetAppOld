@@ -35,7 +35,6 @@ function HomeTabNavigator() {
       <Tab.Navigator
         tabBarOptions={{
           activeTintColor: '#41484F',
-          activeBackgroundColor: '#FCFCFC',
           keyboardHidesTabBar: true,
         }}>
         <Tab.Screen
@@ -68,8 +67,8 @@ function HomeStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#FCFCFC'},
-        headerTitleStyle: {color: '#41484F'},
+        headerStyle: {backgroundColor: '#6200EE'},
+        headerTitleStyle: {color: '#FCFCFC'},
       }}>
       <Stack.Screen name="Home" component={HomeCompanyScreen} />
       <Stack.Screen
@@ -85,8 +84,8 @@ function EntryStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#FCFCFC'},
-        headerTitleStyle: {color: '#41484F'},
+        headerStyle: {backgroundColor: '#6200EE'},
+        headerTitleStyle: {color: '#FCFCFC'},
       }}>
       <Stack.Screen name="Entrada" component={EntryScreen} />
       <Stack.Screen name="Details" component={CarDetailsScreen} />
@@ -98,8 +97,8 @@ function FinishedStackNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: '#FCFCFC'},
-        headerTitleStyle: {color: '#41484F'},
+        headerStyle: {backgroundColor: '#6200EE'},
+        headerTitleStyle: {color: '#FCFCFC'},
       }}>
       <Stack.Screen name="Saida" component={FinishedScreen} />
     </Stack.Navigator>
@@ -111,8 +110,8 @@ function PricesStackNavigator() {
     <PriceProvider>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: {backgroundColor: '#FCFCFC'},
-          headerTitleStyle: {color: '#41484F'},
+          headerStyle: {backgroundColor: '#6200EE'},
+          headerTitleStyle: {color: '#FCFCFC'},
         }}>
         <Stack.Screen name="Prices" component={PricesScreen} />
         <Stack.Screen name="HandlePrice" component={HandlePriceScreen} />

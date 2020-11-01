@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 100,
     borderWidth: 2,
-    borderColor: '#832D25',
+    borderColor: '#12005e',
   },
   textEnable: {
-    color: '#832D25',
+    color: '#12005e',
   },
   textDisable: {
     color: '#41484F',

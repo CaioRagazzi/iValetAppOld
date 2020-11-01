@@ -11,9 +11,11 @@ import EntryScreen from '../screens/companyScreens/entry';
 import CarDetailsScreen from '../screens/companyScreens/carDetails';
 import FinishedScreen from '../screens/companyScreens/finished';
 import PricesScreen from '../screens/companyScreens/price/prices';
+import CaixaScreen from '../screens/companyScreens/caixa';
 import HandlePriceScreen from '../screens/companyScreens/price/handlePrice';
 import {GatewayProvider} from '../contexts/gateway';
 import {PriceProvider} from '../contexts/price';
+import {CaixaProvider} from '../contexts/caixa';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -21,11 +23,26 @@ const Drawer = createDrawerNavigator();
 
 function HomeCompanyNavigator() {
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={HomeTabNavigator} />
-      <Drawer.Screen name="Prices" component={PricesStackNavigator} />
-    </Drawer.Navigator>
+    <CaixaProvider>
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomDrawerContent {...props} />}>
+        <Drawer.Screen name="Home" component={HomeTabNavigator} />
+        <Drawer.Screen name="Prices" component={PricesStackNavigator} />
+        <Drawer.Screen name="Caixa" component={CaixaStackNavigator} />
+      </Drawer.Navigator>
+    </CaixaProvider>
+  );
+}
+
+function CaixaStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#4a148c'},
+        headerTitleStyle: {color: '#ffffff'},
+      }}>
+      <Stack.Screen name="Caixa" component={CaixaScreen} />
+    </Stack.Navigator>
   );
 }
 

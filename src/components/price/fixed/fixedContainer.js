@@ -12,8 +12,8 @@ export default function FixedContainer() {
         <Text style={styles.text}>Valor Fixo: </Text>
         {!isEdit ? (
           <Switch
-            trackColor={{false: '#767577', true: '#9E8170'}}
-            thumbColor={isFixedEnabled ? '#832D25' : '#f4f3f4'}
+            trackColor={{false: '#767577', true: '#12005e'}}
+            thumbColor={isFixedEnabled ? '#7c43bd' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
             onValueChange={() => handleSwitches('fixed')}
             value={isFixedEnabled}

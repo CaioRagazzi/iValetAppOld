@@ -1,17 +1,13 @@
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {Text as TextH, Button} from 'react-native-elements';
 import FloatingActionButton from '../../components/floatingActionButton';
-import axios from '../../services/axios';
-import {AuthContext} from '../../contexts/auth';
-import {showWarning} from '../../components/toast';
+import {CaixaContext} from '../../contexts/caixa';
 import OpenDrawerIcon from '../../components/openDrawerIcon';
 import {stylesDefault} from '../../styles/defaultStyles';
+import {showWarning} from '../../components/toast';
 
 export default function HomeScreen({navigation}) {
-  const {companyId} = useContext(AuthContext);
-  const [isCaixaOpened, setIsCaixaOpened] = useState(false);
-
+  const {loading, isCaixaOpened, openCloseCaixa} = useContext(CaixaContext);
   useEffect(() => {
     navigation.setOptions({
       title: 'Home',
@@ -19,45 +15,7 @@ export default function HomeScreen({navigation}) {
         <OpenDrawerIcon onPress={() => navigation.toggleDrawer()} />
       ),
     });
-    axios
-      .get(`caixa/openedCaixa/${companyId}`)
-      .then((res) => {
-        if (res.data.id) {
-          setIsCaixaOpened(true);
-        }
-      })
-      .catch((err) => {
-        if (err.response.data.message === 'Theres no opened Caixa') {
-          setIsCaixaOpened(false);
-        }
-      });
-  }, [companyId, navigation]);
-
-  const openCloseCaixa = () => {
-    if (isCaixaOpened) {
-      axios
-        .post('caixa/closeCaixa', null, {
-          params: {
-            companyId,
-          },
-        })
-        .then((res) => {
-          setIsCaixaOpened(false);
-        })
-        .catch((err) => {});
-    } else {
-      axios
-        .post('caixa/openCaixa', null, {
-          params: {
-            companyId,
-          },
-        })
-        .then((res) => {
-          setIsCaixaOpened(true);
-        })
-        .catch((err) => {});
-    }
-  };
+  }, [navigation]);
 
   const handleCarEnty = () => {
     if (isCaixaOpened) {
@@ -69,7 +27,7 @@ export default function HomeScreen({navigation}) {
 
   return (
     <View style={[styles.mainContainer, stylesDefault.mainContainer]}>
-      <TextH h2> Caixa {isCaixaOpened ? 'Aberto' : 'Fechado'} </TextH>
+      {/* <TextH h2> Caixa {isCaixaOpened ? 'Aberto' : 'Fechado'} </TextH> */}
       {/* <View style={styles.resumeContainer}>
         <View style={styles.containerRow}>
           <Text>Total 1</Text>
@@ -92,11 +50,15 @@ export default function HomeScreen({navigation}) {
           <Text>50</Text>
         </View>
       </View> */}
-      <Button
+      {/* <Button
         title={isCaixaOpened ? 'Fechar Caixa' : 'Abrir Caixa'}
         onPress={() => openCloseCaixa()}
+      /> */}
+      <FloatingActionButton
+        isLoading={loading}
+        text="Entrada"
+        onPress={() => handleCarEnty()}
       />
-      <FloatingActionButton text="Entrada" onPress={() => handleCarEnty()} />
     </View>
   );
 }

@@ -22,8 +22,8 @@ export default function DynamicContainer() {
           <Text style={styles.text}>Valor Dinâmico: </Text>
           {!isEdit ? (
             <Switch
-              trackColor={{false: '#767577', true: '#9E8170'}}
-              thumbColor={isDynamicEnabled ? '#832D25' : '#f4f3f4'}
+              trackColor={{false: '#767577', true: '#12005e'}}
+              thumbColor={isDynamicEnabled ? '#7c43bd' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={() => handleSwitches('dynamic')}
               value={isDynamicEnabled}

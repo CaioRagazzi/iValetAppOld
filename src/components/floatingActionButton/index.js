@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function FloatingActionButton(props) {
@@ -7,14 +13,37 @@ export default function FloatingActionButton(props) {
     if (props.icon) {
       return props.icon;
     } else {
-      return <Icon name="car-sport-outline" size={24} color="#ffffff" />;
+      return (
+        <Icon
+          style={styles.icon}
+          name="car-sport-outline"
+          size={24}
+          color="#ffffff"
+        />
+      );
     }
+  };
+
+  const getContent = () => {
+    if (props.isLoading) {
+      return <ActivityIndicator color="#ffffff" />;
+    } else {
+      return (
+        <View>
+          {getIcon()}
+          {getText()}
+        </View>
+      );
+    }
+  };
+
+  const getText = () => {
+    return <Text style={styles.text}>{props.text}</Text>;
   };
 
   return (
     <TouchableOpacity style={styles.mainContainer} onPress={props.onPress}>
-      {getIcon()}
-      <Text style={styles.text}>{props.text}</Text>
+      {getContent()}
     </TouchableOpacity>
   );
 }
@@ -38,5 +67,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  icon: {
+    alignSelf: 'center',
   },
 });

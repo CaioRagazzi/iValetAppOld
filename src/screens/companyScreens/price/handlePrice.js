@@ -117,7 +117,7 @@ export default function HandlePrice({navigation, route}) {
       return true;
     });
     navigation.setOptions({
-      title: 'Home',
+      title: 'Preço',
       headerRight: () => (
         <TouchableOpacity>
           <SaveIcon onPress={() => save()} />
@@ -125,6 +125,7 @@ export default function HandlePrice({navigation, route}) {
       ),
       headerLeft: () => (
         <HeaderBackButton
+        tintColor="#ffffff"
           onPress={() => {
             navigation.goBack();
             cleanFields();

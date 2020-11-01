@@ -10,6 +10,7 @@ export default function HeaderPlusIcon(props) {
         name="add-circle-outline"
         size={28}
         onPress={() => props.onPress()}
+        color="#ffffff"
       />
     </SafeAreaView>
   );

@@ -15,6 +15,7 @@ import {PriceContext} from '../../../contexts/price';
 import {showWarning} from '../../../components/toast';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/Ionicons';
+import OpenDrawerIcon from '../../../components/openDrawerIcon';
 
 export default function Prices({navigation}) {
   const {companyId} = useContext(AuthContext);
@@ -33,6 +34,9 @@ export default function Prices({navigation}) {
       title: 'Preços',
       headerRight: () => (
         <HeaderPlusIcon onPress={() => navigation.navigate('HandlePrice')} />
+      ),
+      headerLeft: () => (
+        <OpenDrawerIcon onPress={() => navigation.toggleDrawer()} />
       ),
     });
 

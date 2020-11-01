@@ -10,6 +10,7 @@ export default function SaveIcon(props) {
         name="save-outline"
         size={24}
         onPress={() => props.onPress()}
+        color="#ffffff"
       />
     </SafeAreaView>
   );

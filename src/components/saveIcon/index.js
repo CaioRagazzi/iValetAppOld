@@ -1,18 +1,20 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function SaveIcon(props) {
   return (
-    <SafeAreaView>
-      <Icon
-        style={styles.icon}
-        name="save-outline"
-        size={24}
-        onPress={() => props.onPress()}
-        color="#ffffff"
-      />
-    </SafeAreaView>
+    <TouchableOpacity>
+      <SafeAreaView>
+        <Icon
+          style={styles.icon}
+          name="save-outline"
+          size={24}
+          onPress={() => props.onPress()}
+          color="#ffffff"
+        />
+      </SafeAreaView>
+    </TouchableOpacity>
   );
 }
 

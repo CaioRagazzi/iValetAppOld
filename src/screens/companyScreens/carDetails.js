@@ -1,12 +1,6 @@
 import React, {useEffect, useContext, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native';
-import {Divider, Card} from 'react-native-elements';
+import {Text, StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native';
+import {Card} from 'react-native-elements';
 import axios from '../../services/axios';
 import FloatingActionButton from '../../components/floatingActionButton';
 import {format, subHours, differenceInMinutes, parseISO} from 'date-fns';
@@ -60,10 +54,18 @@ export default function CarDetails({route, navigation}) {
             }
           });
 
-          if (!foundValue && res.data[0].maxPriceValue === 0) {
+          if (
+            !foundValue &&
+            (res.data[0].maxPriceValue === 0 ||
+              res.data[0].maxPriceValue === null)
+          ) {
             let maxPrice = sortedReturn[sortedReturn.length - 1].price;
             setPrice(maxPrice);
-          } else if (!foundValue && res.data[0].maxPriceValue !== 0) {
+          } else if (
+            !foundValue &&
+            (res.data[0].maxPriceValue !== 0 ||
+              res.data[0].maxPriceValue !== null)
+          ) {
             setPrice(res.data[0].maxPriceValue);
           }
         }
@@ -134,6 +136,7 @@ const styles = StyleSheet.create({
   texts: {
     fontSize: 26,
     fontWeight: '700',
+    textAlign: 'center',
   },
   titleTexts: {
     fontSize: 15,

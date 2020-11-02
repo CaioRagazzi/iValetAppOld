@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
   View,
   BackHandler,
@@ -118,14 +117,10 @@ export default function HandlePrice({navigation, route}) {
     });
     navigation.setOptions({
       title: 'Preço',
-      headerRight: () => (
-        <TouchableOpacity>
-          <SaveIcon onPress={() => save()} />
-        </TouchableOpacity>
-      ),
+      headerRight: () => <SaveIcon onPress={() => save()} />,
       headerLeft: () => (
         <HeaderBackButton
-        tintColor="#ffffff"
+          tintColor="#ffffff"
           onPress={() => {
             navigation.goBack();
             cleanFields();

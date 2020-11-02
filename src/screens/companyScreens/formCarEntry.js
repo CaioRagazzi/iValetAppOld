@@ -1,56 +1,106 @@
-import React, {useState, useContext} from 'react';
-import {View} from 'react-native';
+import React, {useState, useContext, useEffect} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  Keyboard,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {Input, Button} from 'react-native-elements';
+import {Input, Card} from 'react-native-elements';
 import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
 import IconIonicon from 'react-native-vector-icons/Ionicons';
 import {showError} from '../../components/toast';
+import SaveIcon from '../../components/saveIcon';
+import {HeaderBackButton} from '@react-navigation/stack';
 
 export default function FormCarEntryScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
   const [placa, setPlaca] = useState('');
   const [prisma, setPrisma] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const addCar = () => {
-    axios
-      .post('transaction', {
-        placa,
-        companyId,
-        prismaNumber: +prisma,
-      })
-      .then((res) => {
-        navigation.popToTop();
-        navigation.navigate('Entrada');
-      })
-      .catch((err) => {
-        if (err.response.data.message === 'Cars already in') {
-          showError('Carro já se encontra no estacionamento!');
-        }
-      });
-  };
+  useEffect(() => {
+    const addCar = async () => {
+      Keyboard.dismiss();
+      setLoading(true);
+      await axios
+        .post('transaction', {
+          placa,
+          companyId,
+          prismaNumber: +prisma,
+        })
+        .then((res) => {
+          navigation.popToTop();
+          navigation.navigate('Entrada');
+        })
+        .catch((err) => {
+          if (err.response.data.message === 'Cars already in') {
+            showError('Carro já se encontra no estacionamento!');
+          }
+        });
+      setLoading(false);
+    };
 
-  return (
-    <View>
-      <Input
-        label="Placa"
-        placeholder="Digite a placa do veículo"
-        leftIcon={<Icon name="credit-card" size={24} color="black" />}
-        onChangeText={(value) => setPlaca(value)}
-      />
-      <Input
-        label="Prisma"
-        placeholder="Número do prisma"
-        leftIcon={
-          <IconIonicon name="bookmark-outline" size={24} color="black" />
-        }
-        onChangeText={(value) => setPrisma(value)}
-      />
-      <Button
-        icon={<IconIonicon name="checkbox-outline" size={15} color="green" />}
-        title="Button with icon component"
-        onPress={() => addCar()}
-      />
+    navigation.setOptions({
+      title: 'Preço',
+      headerRight: () => <SaveIcon onPress={() => addCar()} />,
+      headerLeft: () => (
+        <HeaderBackButton
+          tintColor="#ffffff"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
+    });
+  }, [navigation, companyId, placa, prisma]);
+
+  return !loading ? (
+    <SafeAreaView>
+      <ScrollView>
+        <Card containerStyle={styles.cardDateContainer}>
+          <Card.Title>Placa</Card.Title>
+          <Input
+            placeholder="Digite a placa do veículo"
+            leftIcon={<Icon name="credit-card" size={24} color="black" />}
+            onChangeText={(value) => setPlaca(value)}
+          />
+        </Card>
+        <Card containerStyle={styles.cardPrismaContainer}>
+          <Card.Title>Prisma</Card.Title>
+          <Input
+            leftIcon={
+              <IconIonicon name="bookmark-outline" size={24} color="black" />
+            }
+            onChangeText={(value) => setPrisma(value)}
+          />
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  ) : (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator color="#12005e" size="large" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  cardDateContainer: {
+    borderRadius: 20,
+    elevation: 5,
+  },
+  cardPrismaContainer: {
+    width: '50%',
+    borderRadius: 20,
+    elevation: 5,
+    marginBottom: 5,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

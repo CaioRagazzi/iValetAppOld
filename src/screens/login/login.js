@@ -28,6 +28,7 @@ function LoginScreen(props) {
     setLogged,
     setType,
     setCompanyId,
+    logOut,
   } = useContext(AuthContext);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [username, setUsername] = useState('');
@@ -122,6 +123,7 @@ function LoginScreen(props) {
 
   const closeOverlay = () => {
     setOverlayVisible(false);
+    logOut();
   };
 
   return (

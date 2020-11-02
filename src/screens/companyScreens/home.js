@@ -10,7 +10,7 @@ export default function HomeScreen({navigation}) {
   const {loading, isCaixaOpened, openCloseCaixa} = useContext(CaixaContext);
   useEffect(() => {
     navigation.setOptions({
-      title: 'Home',
+      title: 'Início',
       headerLeft: () => (
         <OpenDrawerIcon onPress={() => navigation.toggleDrawer()} />
       ),

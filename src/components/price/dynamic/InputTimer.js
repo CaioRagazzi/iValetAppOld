@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Input} from 'react-native-elements';
 import {PriceContext} from '../../../contexts/price';
 import {showWarning} from '../../toast';
+import Orientation from 'react-native-orientation';
 
 export default function InputTimer(props) {
   const {
@@ -18,6 +19,17 @@ export default function InputTimer(props) {
     isEdit,
   } = useContext(PriceContext);
   const [loadingDeleteButton, setLoadingDeleteButton] = useState(false);
+  const [orientation, setOrientation] = useState(
+    Orientation.getInitialOrientation(),
+  );
+
+  useEffect(() => {
+    Orientation.addOrientationListener(setOrientation);
+
+    return () => {
+      Orientation.removeOrientationListener(setOrientation);
+    };
+  }, []);
 
   const onRemove = async () => {
     setLoadingDeleteButton(true);
@@ -83,7 +95,9 @@ export default function InputTimer(props) {
       </View>
       <View style={styles.subMainContainer}>
         <Input
-          labelStyle={{marginBottom: 15}}
+          labelStyle={
+            orientation === 'PORTRAIT' ? {marginBottom: 18} : {marginBottom: 0}
+          }
           label="Preço"
           inputContainerStyle={styles.inputContainerDynamic}
           leftIconContainerStyle={styles.inputIconContainerDynamic}

@@ -1,9 +1,28 @@
-import {ToastAndroid} from 'react-native';
+import {Toast} from 'native-base';
 
 export const showWarning = (message) => {
-  ToastAndroid.show(message, ToastAndroid.SHORT);
+  Toast.show({
+    text: message,
+    buttonText: 'Ok',
+    type: 'warning',
+    duration: 3000,
+  });
 };
 
 export const showError = (message) => {
-  ToastAndroid.show(message, ToastAndroid.SHORT);
+  Toast.show({
+    text: message,
+    buttonText: 'Ok',
+    type: 'danger',
+    duration: 3000,
+  });
+};
+
+export const showInformation = (message) => {
+  Toast.show({
+    text: message,
+    buttonText: 'Ok',
+    type: 'success',
+    duration: 3000,
+  });
 };

@@ -1,12 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  Keyboard,
-} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, Keyboard} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {Input, Card} from 'react-native-elements';
 import axios from '../../services/axios';
@@ -15,6 +8,7 @@ import IconIonicon from 'react-native-vector-icons/Ionicons';
 import {showError} from '../../components/toast';
 import SaveIcon from '../../components/saveIcon';
 import {HeaderBackButton} from '@react-navigation/stack';
+import OverlayLoading from '../../components/overlayLoading';
 
 export default function FormCarEntryScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
@@ -58,7 +52,7 @@ export default function FormCarEntryScreen({navigation}) {
     });
   }, [navigation, companyId, placa, prisma]);
 
-  return !loading ? (
+  return (
     <SafeAreaView>
       <ScrollView>
         <Card containerStyle={styles.cardDateContainer}>
@@ -79,11 +73,8 @@ export default function FormCarEntryScreen({navigation}) {
           />
         </Card>
       </ScrollView>
+      <OverlayLoading isLoading={loading} />
     </SafeAreaView>
-  ) : (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator color="#12005e" size="large" />
-    </View>
   );
 }
 

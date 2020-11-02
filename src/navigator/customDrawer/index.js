@@ -9,7 +9,7 @@ import {AuthContext} from '../../contexts/auth';
 
 export default function CustomDrawerContent(props) {
   const {logOut} = useContext(AuthContext);
-  const [focusedDrawerItem, setFocusedDrawerItem] = useState('Home');
+  const [focusedDrawerItem, setFocusedDrawerItem] = useState();
 
   const onDrawerPress = (item) => {
     props.navigation.navigate(item);

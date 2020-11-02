@@ -61,12 +61,11 @@ const styles = StyleSheet.create({
     right: 10,
     backgroundColor: '#4a148c',
     borderRadius: 100,
-    elevation: 5,
+    elevation: 8,
   },
   text: {
     color: '#ffffff',
     fontSize: 12,
-    fontWeight: 'bold',
   },
   icon: {
     alignSelf: 'center',

@@ -4,6 +4,7 @@ import {StatusBar} from 'react-native';
 import Navigator from './src/navigator/index';
 import AuthProvider from './src/contexts/auth';
 import {ThemeProvider} from 'react-native-elements';
+import {Root} from 'native-base';
 
 const App = () => {
   const theme = {
@@ -22,8 +23,10 @@ const App = () => {
   return (
     <AuthProvider>
       <ThemeProvider theme={theme}>
-        <StatusBar backgroundColor="#38006b" />
-        <Navigator />
+        <Root>
+          <StatusBar backgroundColor="#38006b" />
+          <Navigator />
+        </Root>
       </ThemeProvider>
     </AuthProvider>
   );

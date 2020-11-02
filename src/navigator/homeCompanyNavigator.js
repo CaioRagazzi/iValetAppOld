@@ -63,9 +63,9 @@ function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) =>
               focused ? (
-                <IconIonicon name="home" size={24} color="#ffffff" />
+                <IconIonicon name="home" size={23} color="#ffffff" />
               ) : (
-                <IconIonicon name="home-outline" size={24} color="#ffffff" />
+                <IconIonicon name="home-outline" size={23} color="#ffffff" />
               ),
           }}
         />
@@ -75,11 +75,11 @@ function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) =>
               focused ? (
-                <IconIonicon name="arrow-up-circle" size={30} color="#ffffff" />
+                <IconIonicon name="arrow-up-circle" size={28} color="#ffffff" />
               ) : (
                 <IconIonicon
                   name="arrow-up-circle-outline"
-                  size={30}
+                  size={28}
                   color="#ffffff"
                 />
               ),
@@ -93,13 +93,13 @@ function HomeTabNavigator() {
               focused ? (
                 <IconIonicon
                   name="arrow-down-circle"
-                  size={30}
+                  size={28}
                   color="#ffffff"
                 />
               ) : (
                 <IconIonicon
                   name="arrow-down-circle-outline"
-                  size={30}
+                  size={28}
                   color="#ffffff"
                 />
               ),

@@ -6,12 +6,14 @@ import FloatingActionButton from '../../components/floatingActionButton';
 import {format, subHours, differenceInMinutes, parseISO} from 'date-fns';
 import {AuthContext} from '../../contexts/auth';
 import {showWarning} from '../../components/toast';
+import OverlayLoading from '../../components/overlayLoading';
 
 export default function CarDetails({route, navigation}) {
   const {transactionParam} = route.params;
   const {companyId} = useContext(AuthContext);
   const [price, setPrice] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({title: 'Detalhes'});
@@ -77,8 +79,9 @@ export default function CarDetails({route, navigation}) {
       });
   }, [navigation, transactionParam.placa, companyId, transactionParam]);
 
-  const handleBaixaVeiculo = () => {
-    axios
+  const handleBaixaVeiculo = async () => {
+    setLoadingPage(true);
+    await axios
       .put('transaction/finish', null, {
         params: {
           transactionId: transactionParam.id,
@@ -90,6 +93,7 @@ export default function CarDetails({route, navigation}) {
         navigation.navigate('Saida');
       })
       .catch((err) => {});
+    setLoadingPage(false);
   };
 
   return (
@@ -122,6 +126,8 @@ export default function CarDetails({route, navigation}) {
         </Text>
       </Card>
       <FloatingActionButton text="Saída" onPress={() => handleBaixaVeiculo()} />
+
+      <OverlayLoading isLoading={loadingPage} />
     </SafeAreaView>
   );
 }
@@ -152,5 +158,12 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
     margin: 6,
+    elevation: 5,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: 0.5,
   },
 });

@@ -26,6 +26,10 @@ export default function InputTimer(props) {
   useEffect(() => {
     Orientation.addOrientationListener(setOrientation);
 
+    Orientation.getOrientation((_, ori) => {
+      setOrientation(ori);
+    });
+
     return () => {
       Orientation.removeOrientationListener(setOrientation);
     };

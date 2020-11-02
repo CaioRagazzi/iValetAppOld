@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexGrow: 1,
     justifyContent: 'center',
+    paddingBottom: 15,
   },
   subMainContainer: {
     padding: 15,
@@ -40,5 +41,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     padding: 0,
     borderRadius: 10,
+    elevation: 5,
   },
 });

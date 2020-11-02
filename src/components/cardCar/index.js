@@ -40,6 +40,8 @@ export default function CardCar({onPress, data}) {
 const styles = StyleSheet.create({
   cardContainer: {
     borderRadius: 10,
+    elevation: 5,
+    marginBottom: 5,
   },
   cardTitle: {
     fontSize: 20,

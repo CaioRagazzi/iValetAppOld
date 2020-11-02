@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import OpenDrawerIcon from '../../../components/openDrawerIcon';
 import {Card} from 'react-native-elements';
@@ -14,9 +15,15 @@ import IconFontisto from 'react-native-vector-icons/Fontisto';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
 import {CaixaContext} from '../../../contexts/caixa';
 import Orientation from 'react-native-orientation';
+import axios from '../../../services/axios';
+import {AuthContext} from '../../../contexts/auth';
 
 export default function CaixaScreen({navigation}) {
-  const {loading, isCaixaOpened, openCloseCaixa} = useContext(CaixaContext);
+  const {loading, isCaixaOpened, openCloseCaixa, setLoading} = useContext(
+    CaixaContext,
+  );
+  const {companyId} = useContext(AuthContext);
+
   const [orientation, setOrientation] = useState(
     Orientation.getInitialOrientation(),
   );
@@ -27,6 +34,10 @@ export default function CaixaScreen({navigation}) {
       headerLeft: () => (
         <OpenDrawerIcon onPress={() => navigation.toggleDrawer()} />
       ),
+    });
+
+    Orientation.getOrientation((_, ori) => {
+      setOrientation(ori);
     });
 
     Orientation.addOrientationListener(setOrientation);
@@ -73,6 +84,35 @@ export default function CaixaScreen({navigation}) {
     }
   };
 
+  const checkIfTheresCarInAndOpenCloseCaixa = async () => {
+    if (isCaixaOpened) {
+      setLoading(true);
+      axios.get(`transaction/opened/${companyId}`).then((res) => {
+        if (res.data === 0) {
+          openCloseCaixa();
+        } else {
+          Alert.alert(
+            'Atenção',
+            'Ainda existem carros estacionados, tem certeza que deseja fechar o caixa?',
+            [
+              {
+                text: 'Cancelar',
+                onPress: () => {
+                  setLoading(false);
+                },
+                style: 'cancel',
+              },
+              {text: 'Sim', onPress: () => openCloseCaixa()},
+            ],
+            {cancelable: false},
+          );
+        }
+      });
+    } else {
+      openCloseCaixa();
+    }
+  };
+
   return (
     <SafeAreaView style={{flexGrow: 1}}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -81,19 +121,13 @@ export default function CaixaScreen({navigation}) {
             orientation === 'PORTRAIT' ? styles.card : styles.cardLandscape
           }
           wrapperStyle={{flex: 1}}>
-          <TouchableOpacity style={{flex: 1}} onPress={() => openCloseCaixa()}>
+          <TouchableOpacity
+            style={{flex: 1}}
+            onPress={() => checkIfTheresCarInAndOpenCloseCaixa()}>
             <View style={styles.cardTitle}>{getTitleCaixa()}</View>
             <View style={styles.iconContainer}>{getIconCaixa()}</View>
           </TouchableOpacity>
         </Card>
-        {/* <Card containerStyle={styles.card}>
-
-            <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              {getIconCaixa()}
-            </View>
-
-        </Card> */}
       </ScrollView>
     </SafeAreaView>
   );

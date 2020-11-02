@@ -1,12 +1,7 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 import axios from '../services/axios';
 import {AuthContext} from '../contexts/auth';
+import {showInformation} from '../components/toast';
 
 export const CaixaContext = createContext();
 
@@ -44,6 +39,7 @@ export const CaixaProvider = ({children}) => {
         })
         .then((res) => {
           setIsCaixaOpened(false);
+          showInformation('Caixa fechado com sucesso!');
         })
         .catch((err) => {});
     } else {
@@ -55,6 +51,7 @@ export const CaixaProvider = ({children}) => {
         })
         .then((res) => {
           setIsCaixaOpened(true);
+          showInformation('Caixa aberto com sucesso!');
         })
         .catch((err) => {});
     }
@@ -62,7 +59,8 @@ export const CaixaProvider = ({children}) => {
   };
 
   return (
-    <CaixaContext.Provider value={{loading, openCloseCaixa, isCaixaOpened}}>
+    <CaixaContext.Provider
+      value={{loading, openCloseCaixa, isCaixaOpened, setLoading}}>
       {children}
     </CaixaContext.Provider>
   );

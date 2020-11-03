@@ -1,14 +1,14 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {SafeAreaView, ScrollView, StyleSheet, Keyboard} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
 import {Input, Card} from 'react-native-elements';
 import axios from '../../services/axios';
 import {AuthContext} from '../../contexts/auth';
-import IconIonicon from 'react-native-vector-icons/Ionicons';
+import {Icon} from 'native-base';
 import {showError} from '../../components/toast';
 import SaveIcon from '../../components/saveIcon';
 import {HeaderBackButton} from '@react-navigation/stack';
 import OverlayLoading from '../../components/overlayLoading';
+import {showWarning} from '../../components/toast';
 
 export default function FormCarEntryScreen({navigation}) {
   const {companyId} = useContext(AuthContext);
@@ -18,6 +18,11 @@ export default function FormCarEntryScreen({navigation}) {
 
   useEffect(() => {
     const addCar = async () => {
+      if (placa === '') {
+        showWarning('Favor digitar a placa do veículo!');
+        return;
+      }
+
       Keyboard.dismiss();
       setLoading(true);
       await axios
@@ -31,6 +36,7 @@ export default function FormCarEntryScreen({navigation}) {
           navigation.navigate('Entrada');
         })
         .catch((err) => {
+          console.log(err.response.data);
           if (err.response.data.message === 'Cars already in') {
             showError('Carro já se encontra no estacionamento!');
           }
@@ -59,7 +65,14 @@ export default function FormCarEntryScreen({navigation}) {
           <Card.Title>Placa</Card.Title>
           <Input
             placeholder="Digite a placa do veículo"
-            leftIcon={<Icon name="credit-card" size={24} color="black" />}
+            leftIcon={
+              <Icon
+                type="MaterialIcons"
+                name="credit-card"
+                size={24}
+                color="black"
+              />
+            }
             onChangeText={(value) => setPlaca(value)}
           />
         </Card>
@@ -67,7 +80,12 @@ export default function FormCarEntryScreen({navigation}) {
           <Card.Title>Prisma</Card.Title>
           <Input
             leftIcon={
-              <IconIonicon name="bookmark-outline" size={24} color="black" />
+              <Icon
+                type="MaterialIcons"
+                name="bookmark-outline"
+                size={24}
+                color="black"
+              />
             }
             onChangeText={(value) => setPrisma(value)}
           />

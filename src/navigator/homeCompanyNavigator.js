@@ -2,7 +2,10 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import IconIonicon from 'react-native-vector-icons/Ionicons';
+import IconFeather from 'react-native-vector-icons/Feather';
+import IconFontisto from 'react-native-vector-icons/Fontisto';
+import IconOcticons from 'react-native-vector-icons/Octicons';
+import {Icon} from 'native-base';
 
 import CustomDrawerContent from './customDrawer';
 import HomeCompanyScreen from '../screens/companyScreens/home';
@@ -16,6 +19,7 @@ import HandlePriceScreen from '../screens/companyScreens/price/handlePrice';
 import {GatewayProvider} from '../contexts/gateway';
 import {PriceProvider} from '../contexts/price';
 import {CaixaProvider} from '../contexts/caixa';
+import {color} from 'react-native-reanimated';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -63,9 +67,13 @@ function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) =>
               focused ? (
-                <IconIonicon name="home" size={23} color="#ffffff" />
+                <Icon
+                  type="MaterialIcons"
+                  name="home"
+                  style={{color: '#ffffff'}}
+                />
               ) : (
-                <IconIonicon name="home-outline" size={23} color="#ffffff" />
+                <IconOcticons name="home" size={23} color="#ffffff" />
               ),
           }}
         />
@@ -75,13 +83,9 @@ function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) =>
               focused ? (
-                <IconIonicon name="arrow-up-circle" size={28} color="#ffffff" />
+                <IconFeather name="arrow-up-circle" size={28} color="#ffffff" />
               ) : (
-                <IconIonicon
-                  name="arrow-up-circle-outline"
-                  size={28}
-                  color="#ffffff"
-                />
+                <IconFeather name="arrow-up" size={24} color="#ffffff" />
               ),
           }}
         />
@@ -91,17 +95,13 @@ function HomeTabNavigator() {
           options={{
             tabBarIcon: ({focused}) =>
               focused ? (
-                <IconIonicon
+                <IconFeather
                   name="arrow-down-circle"
                   size={28}
                   color="#ffffff"
                 />
               ) : (
-                <IconIonicon
-                  name="arrow-down-circle-outline"
-                  size={28}
-                  color="#ffffff"
-                />
+                <IconFeather name="arrow-down" size={24} color="#ffffff" />
               ),
           }}
         />

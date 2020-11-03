@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {Icon} from 'native-base';
 
 export default function FloatingActionButton(props) {
   const getIcon = () => {
@@ -16,9 +16,9 @@ export default function FloatingActionButton(props) {
       return (
         <Icon
           style={styles.icon}
-          name="car-sport-outline"
+          type="MaterialIcons"
+          name="directions-car"
           size={24}
-          color="#ffffff"
         />
       );
     }
@@ -69,5 +69,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center',
+    color: '#ffffff',
   },
 });

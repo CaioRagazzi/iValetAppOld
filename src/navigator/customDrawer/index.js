@@ -40,6 +40,12 @@ export default function CustomDrawerContent(props) {
         focused={focusedDrawerItem === 'Caixa'}
         onPress={() => onDrawerPress('Caixa')}
       />
+      <DrawerItem
+        label="Mensalistas"
+        activeTintColor="#7c43bd"
+        focused={focusedDrawerItem === 'Caixa'}
+        onPress={() => onDrawerPress('Mensalistas')}
+      />
       <DrawerItem label="Logout" onPress={() => logOut()} />
     </DrawerContentScrollView>
   );

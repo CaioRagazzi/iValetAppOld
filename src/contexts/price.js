@@ -295,6 +295,7 @@ export const PriceProvider = ({children}) => {
   };
 
   const cleanFields = () => {
+    setTypePrice(1);
     setSegunda(false);
     setTerca(false);
     setQuarta(false);

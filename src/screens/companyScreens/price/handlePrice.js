@@ -51,6 +51,8 @@ export default function HandlePrice({navigation, route}) {
         return;
       }
       let created = false;
+      console.log(typePrice);
+
       if (typePrice === 1) {
         if (!fixedValue) {
           showWarning('Favor preencher o campo valor');

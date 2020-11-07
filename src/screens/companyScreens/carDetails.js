@@ -81,18 +81,20 @@ export default function CarDetails({route, navigation}) {
 
   const handleBaixaVeiculo = async () => {
     setLoadingPage(true);
+    console.log(transactionParam);
     await axios
       .put('transaction/finish', null, {
         params: {
           transactionId: transactionParam.id,
-          companyId: transactionParam.companyId,
         },
       })
       .then((res) => {
         navigation.popToTop();
         navigation.navigate('Saida');
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log('oierr', err.response.data);
+      });
     setLoadingPage(false);
   };
 

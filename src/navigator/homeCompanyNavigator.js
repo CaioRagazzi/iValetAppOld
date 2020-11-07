@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import IconFeather from 'react-native-vector-icons/Feather';
-import IconFontisto from 'react-native-vector-icons/Fontisto';
 import IconOcticons from 'react-native-vector-icons/Octicons';
 import {Icon} from 'native-base';
 
@@ -16,10 +15,12 @@ import FinishedScreen from '../screens/companyScreens/finished';
 import PricesScreen from '../screens/companyScreens/price/prices';
 import CaixaScreen from '../screens/companyScreens/caixa';
 import HandlePriceScreen from '../screens/companyScreens/price/handlePrice';
+import MensalistasScreen from '../screens/companyScreens/mensalistas';
+import AddMensalistasScreen from '../screens/companyScreens/mensalistas/addMensalista';
+import RegisterMensalistaScreen from '../screens/companyScreens/mensalistas/registerMensalista';
 import {GatewayProvider} from '../contexts/gateway';
 import {PriceProvider} from '../contexts/price';
 import {CaixaProvider} from '../contexts/caixa';
-import {color} from 'react-native-reanimated';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -33,8 +34,29 @@ function HomeCompanyNavigator() {
         <Drawer.Screen name="Home" component={HomeTabNavigator} />
         <Drawer.Screen name="Prices" component={PricesStackNavigator} />
         <Drawer.Screen name="Caixa" component={CaixaStackNavigator} />
+        <Drawer.Screen
+          name="Mensalistas"
+          component={MensalistasStackNavigator}
+        />
       </Drawer.Navigator>
     </CaixaProvider>
+  );
+}
+
+function MensalistasStackNavigator() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#4a148c'},
+        headerTitleStyle: {color: '#ffffff'},
+      }}>
+      <Stack.Screen name="Caixa" component={MensalistasScreen} />
+      <Stack.Screen name="AddMensalista" component={AddMensalistasScreen} />
+      <Stack.Screen
+        name="RegisterMensalista"
+        component={RegisterMensalistaScreen}
+      />
+    </Stack.Navigator>
   );
 }
 

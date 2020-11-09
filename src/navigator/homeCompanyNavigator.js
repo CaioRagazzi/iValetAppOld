@@ -15,6 +15,7 @@ import FinishedScreen from '../screens/companyScreens/finished';
 import PricesScreen from '../screens/companyScreens/price/prices';
 import CaixaScreen from '../screens/companyScreens/caixa';
 import HandlePriceScreen from '../screens/companyScreens/price/handlePrice';
+import ListMensalistasScreen from '../screens/companyScreens/mensalistas/listMensalistas';
 import MensalistasScreen from '../screens/companyScreens/mensalistas';
 import AddMensalistasScreen from '../screens/companyScreens/mensalistas/addMensalista';
 import RegisterMensalistaScreen from '../screens/companyScreens/mensalistas/registerMensalista';
@@ -50,7 +51,8 @@ function MensalistasStackNavigator() {
         headerStyle: {backgroundColor: '#4a148c'},
         headerTitleStyle: {color: '#ffffff'},
       }}>
-      <Stack.Screen name="Caixa" component={MensalistasScreen} />
+      <Stack.Screen name="Mensalistas" component={MensalistasScreen} />
+      <Stack.Screen name="ListMensalistas" component={ListMensalistasScreen} />
       <Stack.Screen name="AddMensalista" component={AddMensalistasScreen} />
       <Stack.Screen
         name="RegisterMensalista"

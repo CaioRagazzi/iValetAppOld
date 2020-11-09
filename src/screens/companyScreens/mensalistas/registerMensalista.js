@@ -1,8 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Card, Input, Button} from 'react-native-elements';
+import {HeaderBackButton} from '@react-navigation/stack';
 
-export default function registerMensalista({navigation}) {
+export default function RegisterMensalista({navigation}) {
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Dados Cadastrais',
+      headerLeft: () => (
+        <HeaderBackButton
+          tintColor="#ffffff"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.mainContainer}>
       <Card containerStyle={styles.cardContainer}>
@@ -13,12 +28,7 @@ export default function registerMensalista({navigation}) {
         <Input placeholder="Marca" />
         <Input placeholder="Modelo" />
       </Card>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '80%',
-          justifyContent: 'center'
-        }}>
+      <View style={styles.mainContainerButtons}>
         <Button
           title="Voltar"
           type="outline"
@@ -56,5 +66,10 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     width: '45%',
+  },
+  mainContainerButtons: {
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'center',
   },
 });

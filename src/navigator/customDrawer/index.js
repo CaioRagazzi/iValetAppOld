@@ -43,7 +43,7 @@ export default function CustomDrawerContent(props) {
       <DrawerItem
         label="Mensalistas"
         activeTintColor="#7c43bd"
-        focused={focusedDrawerItem === 'Caixa'}
+        focused={focusedDrawerItem === 'Mensalistas'}
         onPress={() => onDrawerPress('Mensalistas')}
       />
       <DrawerItem label="Logout" onPress={() => logOut()} />

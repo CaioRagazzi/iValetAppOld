@@ -10,7 +10,6 @@ export default function CardCar({onPress, data}) {
         <Card.Title style={styles.cardTitle}>
           {data.placa.toUpperCase()}
         </Card.Title>
-        {/* <Card.Divider /> */}
         <View>
           <View style={styles.textsDescriptionsContainer}>
             <Text style={styles.textTitle}>Entrada:</Text>

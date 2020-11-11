@@ -19,6 +19,8 @@ import ListMensalistasScreen from '../screens/companyScreens/mensalistas/listMen
 import MensalistasScreen from '../screens/companyScreens/mensalistas';
 import AddMensalistasScreen from '../screens/companyScreens/mensalistas/addMensalista';
 import RegisterMensalistaScreen from '../screens/companyScreens/mensalistas/registerMensalista';
+import MonthlyPricesScreen from '../screens/companyScreens/mensalistas/monthlyPrices';
+import HandleMonthlyPricesScreen from '../screens/companyScreens/mensalistas/handleMonthlyPrices';
 import {GatewayProvider} from '../contexts/gateway';
 import {PriceProvider} from '../contexts/price';
 import {CaixaProvider} from '../contexts/caixa';
@@ -57,6 +59,11 @@ function MensalistasStackNavigator() {
       <Stack.Screen
         name="RegisterMensalista"
         component={RegisterMensalistaScreen}
+      />
+      <Stack.Screen name="MonthlyPrices" component={MonthlyPricesScreen} />
+      <Stack.Screen
+        name="HandleMonthlyPrices"
+        component={HandleMonthlyPricesScreen}
       />
     </Stack.Navigator>
   );

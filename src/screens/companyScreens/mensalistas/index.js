@@ -16,7 +16,9 @@ export default function Mensalistas({navigation}) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ListItem bottomDivider onPress={() => {}}>
+      <ListItem
+        bottomDivider
+        onPress={() => navigation.navigate('MonthlyPrices')}>
         <IconIonicons name="cash-outline" color="#000" size={20} />
         <ListItem.Content>
           <ListItem.Title>Tabelas de Preço</ListItem.Title>

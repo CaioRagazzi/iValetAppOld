@@ -38,7 +38,6 @@ export default function MonthlyPrices({navigation}) {
       .get(`monthlyPrices/${companyId}`)
       .then((res) => {
         setPrices(res.data);
-        console.log(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -50,7 +49,6 @@ export default function MonthlyPrices({navigation}) {
   const renderItem = ({item}) => {
     return (
       <ListItem
-        key={item.id}
         bottomDivider
         onPress={() =>
           navigation.navigate('HandleMonthlyPrices', {price: item})
@@ -69,7 +67,7 @@ export default function MonthlyPrices({navigation}) {
       <FlatList
         data={prices}
         renderItem={renderItem}
-        keyExtractor={(item) => item.uniqueIdPrice}
+        keyExtractor={(item) => item.id.toString()}
         refreshing={loading}
         onRefresh={() => getPrices()}
       />

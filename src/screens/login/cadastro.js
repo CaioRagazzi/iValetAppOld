@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 import {Button, Input, Icon} from 'react-native-elements';
 
 import {InputEmail} from '../../components/inputEmail';
 import {InputPassword} from '../../components/inputPassword';
 import BaseLayout from './baseLayout';
 import axios from '../../services/axios';
-import {showError, showWarning} from '../../components/toast';
+import {showError, showInformation} from '../../components/toast';
 
 function CadastroLogin(props) {
   const [name, setName] = useState('');
@@ -41,6 +41,7 @@ function CadastroLogin(props) {
   };
 
   const handleRegister = async () => {
+    Keyboard.dismiss();
     setLoading(true);
     const userToInsert = {
       name,
@@ -49,31 +50,26 @@ function CadastroLogin(props) {
       perfil: 2,
     };
 
-    const userCompanyToInsert = {
+    let userCompanyToInsert = {
       name,
       password,
       email,
       perfil: 1,
-    };
-
-    const companyToInsert = {
-      name: company,
+      companyName: company,
     };
 
     try {
       if (type === 'company') {
-        const newUser = await axios.post('/user', userCompanyToInsert);
-        companyToInsert.user = newUser.data.raw.insertId;
-        await axios.post('/company', companyToInsert);
+        await axios.post('/user/addUserAndCompany', userCompanyToInsert);
       } else {
         await axios.post('/user', userToInsert);
       }
-      showWarning('Usuário criado com sucesso!');
-      props.navigation.goBack();
+      showInformation('Usuário criado com sucesso!');
+      props.navigation.navigate('Login');
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      if (error.response.data?.message.includes('Duplicate entry')) {
+      if (error.response.data?.message?.includes('already exists')) {
         showError('E-mail já existe!');
       } else {
         showError('Erro ao criar login!');

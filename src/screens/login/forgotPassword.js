@@ -4,7 +4,7 @@ import {Button} from 'react-native-elements';
 import {InputEmail} from '../../components/inputEmail';
 import BaseLayout from './baseLayout';
 import axios from '../../services/axios';
-import {showError, showWarning} from '../../components/toast';
+import {showError, showInformation} from '../../components/toast';
 
 export default function ForgotPassword(props) {
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export default function ForgotPassword(props) {
         to: email,
       })
       .then(() => {
-        showWarning('E-mail de recuperação enviado!');
+        showInformation('E-mail de recuperação enviado!');
         props.navigation.goBack();
         setLoading(false);
       })

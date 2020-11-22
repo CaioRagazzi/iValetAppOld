@@ -22,10 +22,23 @@ export default function OverlayCompanies(props) {
         const token = await AsyncStorage.getItem('access_token');
         var decodedToken = jwt_decode(token);
         setLoading(true);
-        axios
+        await axios
           .get(`user/${decodedToken.id}`)
-          .then((res) => {
-            setCompanies(res.data.company);
+          .then(async (res) => {
+            let companiesToAdd = [];
+            await Promise.all(
+              res.data.companies.map(async (company) => {
+                await axios
+                  .get(`company/${company.companyId}`)
+                  .then((resCompany) => {
+                    companiesToAdd.push(resCompany.data);
+                  })
+                  .catch(() => {
+                    setLoading(false);
+                  });
+              }),
+            );
+            setCompanies(companiesToAdd);
             setLoading(false);
           })
           .catch(() => {
@@ -52,7 +65,7 @@ export default function OverlayCompanies(props) {
   };
 
   const itemList = ({item}) => (
-    <ListItem key={item.id} onPress={() => handleItemPress(item)} bottomDivider>
+    <ListItem onPress={() => handleItemPress(item)} bottomDivider>
       <Avatar
         rounded
         title={item.name.substring(0, 2).toUpperCase()}

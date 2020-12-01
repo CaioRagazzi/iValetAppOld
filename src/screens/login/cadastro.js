@@ -60,7 +60,7 @@ function CadastroLogin(props) {
 
     try {
       if (type === 'company') {
-        await axios.post('/user/addUserAndCompany', userCompanyToInsert);
+        await axios.post('/user/createUserCompany', userCompanyToInsert);
       } else {
         await axios.post('/user', userToInsert);
       }
@@ -68,6 +68,7 @@ function CadastroLogin(props) {
       props.navigation.navigate('Login');
       setLoading(false);
     } catch (error) {
+      console.log(error.response.data);
       setLoading(false);
       if (error.response.data?.message?.includes('already exists')) {
         showError('E-mail já existe!');

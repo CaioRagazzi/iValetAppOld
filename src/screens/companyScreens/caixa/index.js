@@ -85,6 +85,7 @@ export default function CaixaScreen({navigation}) {
   };
 
   const checkIfTheresCarInAndOpenCloseCaixa = async () => {
+    console.log(isCaixaOpened);
     if (isCaixaOpened) {
       setLoading(true);
       axios.get(`transaction/opened/${companyId}`).then((res) => {

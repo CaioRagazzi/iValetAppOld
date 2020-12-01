@@ -15,13 +15,15 @@ export const CaixaProvider = ({children}) => {
     axios
       .get(`caixa/openedCaixa/${companyId}`)
       .then((res) => {
+        console.log('response', res.data);
         if (res.data.id) {
           setIsCaixaOpened(true);
           setLoading(false);
         }
       })
       .catch((err) => {
-        if (err.response.data.message === 'Theres no opened Caixa') {
+        console.log('error', err.response.data);
+        if (err.response.data.message === 'Theres no opened Caixa!') {
           setIsCaixaOpened(false);
           setLoading(false);
         }
@@ -43,6 +45,7 @@ export const CaixaProvider = ({children}) => {
         })
         .catch((err) => {});
     } else {
+      console.log('quicou');
       await axios
         .post('caixa/openCaixa', null, {
           params: {
@@ -53,7 +56,9 @@ export const CaixaProvider = ({children}) => {
           setIsCaixaOpened(true);
           showInformation('Caixa aberto com sucesso!');
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err.response.data);
+        });
     }
     setLoading(false);
   };

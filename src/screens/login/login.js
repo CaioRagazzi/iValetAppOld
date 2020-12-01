@@ -51,7 +51,7 @@ function LoginScreen(props) {
         } else {
           setType(1);
           setLogged(true);
-          setCompanyId(res.data.companies[0].id);
+          setCompanyId(res.data.companies[0].companyId);
         }
       });
     };

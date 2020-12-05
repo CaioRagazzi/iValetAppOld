@@ -6,7 +6,7 @@ import {InputEmail} from '../../components/inputEmail';
 import {InputPassword} from '../../components/inputPassword';
 import BaseLayout from './baseLayout';
 import axios from '../../services/axios';
-import {showError, showWarning} from '../../components/toast';
+import {showError, showSuccess} from '../../components/toast';
 
 function CadastroLogin(props) {
   const [name, setName] = useState('');
@@ -54,24 +54,20 @@ function CadastroLogin(props) {
       password,
       email,
       perfil: 1,
-    };
-
-    const companyToInsert = {
-      name: company,
+      companyName: company,
     };
 
     try {
       if (type === 'company') {
-        const newUser = await axios.post('/user', userCompanyToInsert);
-        companyToInsert.user = newUser.data.raw.insertId;
-        await axios.post('/company', companyToInsert);
+        await axios.post('usercompany/createUserCompany', userCompanyToInsert);
       } else {
         await axios.post('/user', userToInsert);
       }
-      showWarning('Usuário criado com sucesso!');
-      props.navigation.goBack();
+      showSuccess('Usuário criado com sucesso!');
+      props.navigation.popToTop();
       setLoading(false);
     } catch (error) {
+      console.log(error.response.data);
       setLoading(false);
       if (error.response.data?.message.includes('Duplicate entry')) {
         showError('E-mail já existe!');

@@ -45,12 +45,12 @@ function LoginScreen(props) {
   useEffect(() => {
     const handleLoginCompany = async (userId) => {
       await axios.get(`user/${userId}`).then(async (res) => {
-        if (res.data.company.length > 1) {
+        if (res.data.companies.length > 1) {
           setOverlayVisible(true);
         } else {
           setType(1);
           setLogged(true);
-          setCompanyId(res.data.company[0].id);
+          setCompanyId(res.data.companies[0].id);
         }
       });
     };

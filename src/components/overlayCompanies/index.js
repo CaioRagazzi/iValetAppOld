@@ -25,7 +25,7 @@ export default function OverlayCompanies(props) {
         axios
           .get(`user/${decodedToken.id}`)
           .then((res) => {
-            setCompanies(res.data.company);
+            setCompanies(res.data.companies);
             setLoading(false);
           })
           .catch(() => {

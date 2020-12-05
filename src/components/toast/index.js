@@ -26,3 +26,13 @@ export const showInformation = (message) => {
     duration: 3000,
   });
 };
+
+export const showSuccess = (message) => {
+  Toast.show({
+    text: message,
+    buttonText: 'Ok',
+    type: 'success',
+    style: {backgroundColor: '#007f00'},
+    duration: 3000,
+  });
+};
